@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit
 object Backend {
   val listener = actorOf[EventListener].start()
   Scheduler.schedule(listener, TruncateClickStream(), 1, 1, TimeUnit.MINUTES)
+  Scheduler.schedule(listener, UpdateFrontend(), 5, 5, TimeUnit.SECONDS)
 
   val mqReader = new MqReader(listener)
 
@@ -15,20 +16,6 @@ object Backend {
     spawn {
       mqReader.start()
     }
-
-//    while (2 + 2 != 42) {
-//      Thread.sleep(5000)
-//
-//      for (stream <- (listener ? GetClickStream()).as[ClickStream]) {
-//        println("\n** clickstream size is " + stream.clicks.size + " age (ms) " + stream.ageMs)
-//        val topTen = Calculator.calcTopTenPaths(stream)
-//        topTen map { _.summary } foreach println
-//
-//        println("total %.1f%% " format topTen.map(_.percent).sum)
-//      }
-//
-//    }
-
   }
 
   def stop() {

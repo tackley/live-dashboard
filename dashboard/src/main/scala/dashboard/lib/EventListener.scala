@@ -4,10 +4,11 @@ import akka.actor._
 import akka.event.EventHandler
 import collection.GenSeq
 import org.scala_tools.time.Imports._
-
+import dashboard.comet.{TheTopTen, TopTenServer}
 
 case class TruncateClickStream()
 case class GetClickStream()
+case class UpdateFrontend()
 
 
 // it's very very important that this class is totally immutable!
@@ -35,11 +36,15 @@ class EventListener extends Actor {
     }
 
     case GetClickStream() => self.channel ! clickStream
+
+    case UpdateFrontend() => {
+      val calc = Calculator.calcTopTenPaths(clickStream)
+      TopTenServer ! TheTopTen(calc)
+    }
   }
 }
 
 
-// it's very very important that this class is totally immutable!
 
 
 

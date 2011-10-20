@@ -31,7 +31,9 @@ class MqReader(actor: ActorRef) {
         // remove "self refreshes"
         .filterNot { e => e.referrer == Some(e.path) }
         // remove common filter
-        .filterNot { e => e.path.endsWith(".ico") || e.path.endsWith(".xml") || e.path.endsWith(".swf") || e.path.endsWith(".html") }
+        .filterNot { e =>
+          e.path.endsWith(".ico") || e.path.endsWith(".xml") || e.path.endsWith(".swf") || e.path.endsWith(".html") || e.path.endsWith("/json")
+        }
 
 
 
