@@ -1,4 +1,4 @@
-package dashboard
+package dashboard.lib
 
 import org.joda.time.format.DateTimeFormat
 import org.joda.time.DateTime
@@ -27,3 +27,4 @@ object Event {
     case _ => None
   }
 }
+

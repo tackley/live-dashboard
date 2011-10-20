@@ -1,12 +1,20 @@
-package dashboard
+package dashboard.lib
 
 import org.zeromq.ZMQ
 import akka.actor.ActorRef
 
 
-object MqReader {
-
-  def run(actor: ActorRef) {
+class MqReader(actor: ActorRef) {
+  var keepRunning = true
+  
+  def stop() {
+    println("waiting for stop...")
+    keepRunning = false
+    Thread.sleep(2000)
+    println("stop has hopefully happened")
+  }
+  
+  def start() {
     val context = ZMQ.context(1)
     val sub = context.socket(ZMQ.SUB)
 
@@ -28,10 +36,12 @@ object MqReader {
 
 
       event.foreach { actor ! }
-    } while (2 + 2 != 5)
+    } while (keepRunning)
 
     sub.close()
     context.term()
+    
+    println("Stopped!")
   }
 
 }
