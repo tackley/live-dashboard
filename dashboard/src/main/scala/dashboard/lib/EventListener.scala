@@ -4,7 +4,7 @@ import akka.actor._
 import akka.event.EventHandler
 import collection.GenSeq
 import org.scala_tools.time.Imports._
-import dashboard.comet.{TheTopTen, TopTenServer}
+import dashboard.comet._
 
 case class TruncateClickStream()
 case class GetClickStream()
@@ -25,21 +25,19 @@ class EventListener extends Actor {
 
   protected def receive = {
     case e: Event => {
-      //EventHandler.info(this, e)
       clickStream += e
     }
 
     case TruncateClickStream() => {
-      EventHandler.info(this, "Truncating click stream...")
+      EventHandler.info(this, "Truncating click stream (size=%d)" format clickStream.clicks.size)
       clickStream = clickStream.removeEventsBefore(DateTime.now - 15.minutes)
-      EventHandler.info(this, "Truncated click stream!")
+      EventHandler.info(this, "Truncated click stream (size=%d)" format clickStream.clicks.size)
     }
 
     case GetClickStream() => self.channel ! clickStream
 
     case UpdateFrontend() => {
-      val calc = Calculator.calcTopTenPaths(clickStream)
-      TopTenServer ! TheTopTen(calc)
+      TopTenServer ! clickStream
     }
   }
 }

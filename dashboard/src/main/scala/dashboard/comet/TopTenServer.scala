@@ -5,7 +5,7 @@ import lib._
 import net.liftweb.actor.LiftActor
 import net.liftweb.http._
 
-case class TheTopTen(l: List[Calculator.HitReport] = Nil)
+
 
 object TopTenServer extends LiftActor with ListenerManager {
   private var topTen = TheTopTen()
@@ -13,8 +13,9 @@ object TopTenServer extends LiftActor with ListenerManager {
   def createUpdate = topTen
 
   override def lowPriority = {
-    case t: TheTopTen => {
-      topTen = t
+    case clickStream: ClickStream => {
+      val newTopTen = Calculator.calcTopTenPaths(clickStream)
+      topTen = topTen.diff(newTopTen)
       updateListeners()
     }
   }
@@ -32,7 +33,8 @@ class TopTen extends CometActor with CometListener {
   def render = {
     "tr" #> topTen.l.map { hit =>
       ".toplink *" #> <a href={ "http://www.guardian.co.uk" + hit.url }>{hit.url}</a> &
-        ".percent *" #> "%.1f%%".format(hit.percent)
+      ".percent *" #> "%.1f%%".format(hit.percent) &
+      ".mover *" #> hit.movement.imgTag
     }
   }
 
