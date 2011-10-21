@@ -31,11 +31,12 @@ class TopTen extends CometActor with CometListener {
   }
 
   def render = {
-    "tr" #> topTen.l.map { hit =>
-      ".toplink *" #> <a href={ "http://www.guardian.co.uk" + hit.url }>{hit.url}</a> &
+    "tr" #> (topTen.l.map { hit: HitReport =>
+      ".toplink" #> <a href={ "http://www.guardian.co.uk" + hit.url }>{hit.url}</a> &
       ".percent *" #> "%.1f%%".format(hit.percent) &
-      ".mover *" #> hit.movement.imgTag
-    }
+      ".mover *" #> hit.movement.imgTag &
+      "li" #> hit.referrerPercents.take(5).map { case (host, percent) => "* *" #> "%.0f%% from %s".format(percent, host) }
+    })
   }
 
 }

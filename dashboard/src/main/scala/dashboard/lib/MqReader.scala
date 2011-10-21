@@ -29,10 +29,11 @@ class MqReader(actor: ActorRef) {
         // remove failures
         .filter { _.responseCode == 200 }
         // remove "self refreshes"
-        .filterNot { e => e.referrer == Some(e.path) }
+        .filterNot { isSelfRefresh }
         // remove common filter
         .filterNot { e =>
-          e.path.endsWith(".ico") || e.path.endsWith(".xml") || e.path.endsWith(".swf") || e.path.endsWith(".html") || e.path.endsWith("/json")
+          e.path.endsWith(".ico") || e.path.endsWith(".xml") || e.path.endsWith(".swf") ||
+            e.path.endsWith(".html") || e.path.endsWith("/json") || e.path == "/_"
         }
 
 
@@ -45,5 +46,8 @@ class MqReader(actor: ActorRef) {
     
     println("Stopped!")
   }
+
+
+  def isSelfRefresh(e: Event) = e.referrer.exists(_.startsWith("http://www.guardian.co.uk" + e.path))
 
 }
