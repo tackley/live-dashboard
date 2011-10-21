@@ -19,6 +19,7 @@ class MqReader(actor: ActorRef) {
     val sub = context.socket(ZMQ.SUB)
 
     sub.connect("tcp://localhost:5536")
+    sub.connect("tcp://localhost:5537")
     sub.subscribe(Array.empty)
     sub.setHWM(50)
 
@@ -33,10 +34,9 @@ class MqReader(actor: ActorRef) {
         // remove common filter
         .filterNot { e =>
           e.path.endsWith(".ico") || e.path.endsWith(".xml") || e.path.endsWith(".swf") ||
-            e.path.endsWith(".html") || e.path.endsWith("/json") || e.path == "/_"
+            e.path.endsWith(".html") || e.path.endsWith("/json") || e.path == "/_" ||
+            e.path.startsWith("/global/adcode/generate")
         }
-
-
 
       event.foreach { actor ! }
     } while (keepRunning)

@@ -12,16 +12,18 @@ case class UpdateFrontend()
 
 
 // it's very very important that this class is totally immutable!
-case class ClickStream(clicks: GenSeq[Event], lastUpdated: DateTime) {
+case class ClickStream(clicks: GenSeq[Event], lastUpdated: DateTime, firstUpdated: DateTime) {
   def +(e: Event) = copy(clicks = e +: clicks, lastUpdated = e.dt)
-  def removeEventsBefore(dt: DateTime) = copy(clicks = clicks.filterNot(_.dt < dt))
+  def removeEventsBefore(dt: DateTime) = copy(
+    clicks = clicks.filterNot(_.dt < dt),
+    firstUpdated = if (firstUpdated > dt) firstUpdated else dt)
 
   def ageMs = DateTime.now.millis - lastUpdated.millis
 }
 
 
 class EventListener extends Actor {
-  var clickStream = ClickStream(Nil.par, DateTime.now)
+  var clickStream = ClickStream(Nil.par, DateTime.now, DateTime.now)
 
   protected def receive = {
     case e: Event => {

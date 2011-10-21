@@ -8,21 +8,23 @@ import net.liftweb.http._
 
 
 object TopTenServer extends LiftActor with ListenerManager {
-  private var topTen = TheTopTen()
+  private var _topTen: TheTopTen = TheTopTen()
 
-  def createUpdate = topTen
+  def createUpdate = _topTen
+
+  def topTen = _topTen
 
   override def lowPriority = {
     case clickStream: ClickStream => {
       val newTopTen = Calculator.calcTopTenPaths(clickStream)
-      topTen = topTen.diff(newTopTen)
+      _topTen = _topTen.diff(newTopTen, clickStream)
       updateListeners()
     }
   }
 }
 
 class TopTen extends CometActor with CometListener {
-  private var topTen = TheTopTen()
+  private var topTen: TheTopTen = TheTopTen()
 
   def registerWith = TopTenServer
 
@@ -31,12 +33,13 @@ class TopTen extends CometActor with CometListener {
   }
 
   def render = {
-    "tr" #> (topTen.l.map { hit: HitReport =>
-      ".toplink" #> <a href={ "http://www.guardian.co.uk" + hit.url }>{hit.url}</a> &
+    "tr" #> (topTen.hits.zipWithIndex.map { case (hit: HitReport, idx: Int) =>
+      ".toplink" #> <a href={ "details#" + (idx+1)}>{hit.url}</a> &
       ".percent *" #> "%.1f%%".format(hit.percent) &
       ".mover *" #> hit.movement.imgTag &
       "li" #> hit.referrerPercents.take(5).map { case (host, percent) => "* *" #> "%.0f%% from %s".format(percent, host) }
-    })
+    }) &
+    ".latest-data" #> topTen.ageString
   }
 
 }
