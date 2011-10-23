@@ -26,8 +26,8 @@ Then start the thingy that tails the log and publishes to ZeroMQ:
 
 Finally, start the webapp with:
 
-   cd dashboard
-   ../sbt "container:start" "shell"
+    cd dashboard
+    ../sbt "container:start" "shell"
 
 Now go to http://localhost:8080 and enjoy.
 
