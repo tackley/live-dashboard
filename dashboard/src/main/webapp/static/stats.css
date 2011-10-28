@@ -7,5 +7,6 @@
 .top-of-the-pops .percent, .mover {
     text-align: center;
     vertical-align: middle;
+    width: 50px;
 }
 
