@@ -1,8 +1,8 @@
 package dashboard.snippet
 
 import net.liftweb.util.Helpers._
-import dashboard.comet.TopTenServer
+import dashboard.comet.TopHitsServer
 
 class DataAge {
-  def render = "*" #> TopTenServer.topTen.ageString
+  def render = "*" #> TopHitsServer.topStuff.ageString
 }

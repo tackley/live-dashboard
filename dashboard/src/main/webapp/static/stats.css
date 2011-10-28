@@ -1,0 +1,11 @@
+.top-of-the-pops img {
+    width: 30px;
+    height: 30px;
+    text-align: center;
+}
+
+.top-of-the-pops .percent, .mover {
+    text-align: center;
+    vertical-align: middle;
+}
+

@@ -14,3 +14,6 @@ libraryDependencies ++= Seq(
     "org.eclipse.jetty" % "jetty-webapp" % "7.5.3.v20111011" % "container"
 )
 
+port in container.Configuration := 8081
+
+

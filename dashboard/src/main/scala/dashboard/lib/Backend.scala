@@ -26,5 +26,5 @@ object Backend {
 
   def clickStream = (listener ? GetClickStream()).as[ClickStream].get
 
-  def currentTopTen = Calculator.calcTopTenPaths(clickStream)
+  def currentTopTen = Calculator.calcTopPaths(clickStream)
 }

@@ -39,7 +39,7 @@ class EventListener extends Actor {
     case GetClickStream() => self.channel ! clickStream
 
     case UpdateFrontend() => {
-      TopTenServer ! clickStream
+      TopHitsServer ! clickStream
     }
   }
 }

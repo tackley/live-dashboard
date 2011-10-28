@@ -25,8 +25,15 @@ case class HitReport(url: String, percent: Double, hits: Int, referrers: List[St
 }
 
 
+case class ListsOfStuff(
+  all: TopHits = TopHits(),
+  content: TopHits = TopHits(),
+  other: TopHits = TopHits(),
+  lastUpdated: DateTime = DateTime.now,
+  firstUpdated: DateTime = DateTime.now
+) {
+  import ListsOfStuff._
 
-case class TheTopTen(hits: List[HitReport] = Nil, lastUpdated: DateTime = DateTime.now, firstUpdated: DateTime = DateTime.now) {
   private val fmt = "d MMM yyyy h:mm:ss a"
 
   def ageString = "%s to %s" format (
@@ -34,8 +41,29 @@ case class TheTopTen(hits: List[HitReport] = Nil, lastUpdated: DateTime = DateTi
     lastUpdated.toString(fmt)
   )
 
-  def diff(newList: List[HitReport], clickStream: ClickStream): TheTopTen = {
-    TheTopTen(newList.zipWithIndex map { case (hit, idx) => diffedHit(hit, idx) }, clickStream.lastUpdated, clickStream.firstUpdated)
+  def diff(newList: List[HitReport], clicks: ClickStream) = {
+    val (newContent, newOther) = newList.partition(isContent)
+
+    copy(
+      all.diff(newList take 10),
+      content.diff(newContent take 20),
+      other.diff(newOther take 20),
+      clicks.lastUpdated,
+      clicks.firstUpdated
+    )
+  }
+
+  def isContent(h: HitReport) = contentMatch.findFirstIn(h.url).isDefined
+}
+
+object ListsOfStuff {
+  val contentMatch = """/\d{4}/\w{3}/\d{2}""".r
+}
+
+case class TopHits(hits: List[HitReport] = Nil) {
+
+  def diff(newList: List[HitReport]): TopHits = {
+    TopHits(newList.zipWithIndex map { case (hit, idx) => diffedHit(hit, idx) })
   }
 
   def diffedHit(newHitReport: HitReport, newIdx: Int) = {
