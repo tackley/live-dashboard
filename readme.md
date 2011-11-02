@@ -17,19 +17,28 @@ The publisher bit uses ruby, so you'll also need to install the gem:
 
     sudo gem install zmq
 
-Then start the thingy that tails the log and publishes to ZeroMQ:
+On my version on Ubuntu (11.10) I get an error message like:
 
-    ./start_pub.sh
-    ./start_pub2.sh
+    Invalid gemspec in [/var/lib/gems/1.8/specifications/foreman-0.25.0.gemspec]: invalid date format in specification: "2011-10-17 00:00:00.000000000Z"
 
-(The first tails guweb01, the second guweb51.)
+In which case you need to follow the instructions at on [Stack Overflow](http://stackoverflow.com/questions/5771758/invalid-gemspec-because-of-the-date-format-in-specification):
 
-Finally, start the webapp with:
+    sudo gem install rubygems-update
+    sudo update_rubygems
 
-    cd dashboard
-    ../sbt "container:start" "shell"
+Note this will effectively uninstall all your gems, so you'll need to repeat the `gem install` command above.
 
-Now go to http://localhost:8080 and enjoy.
+We use [Foreman](https://github.com/ddollar/foreman) to startup all the apps, so install that with:
+
+    sudo gem install foreman
+
+Then startup with:
+
+    foreman start
+
+Now go to http://localhost:8080 and enjoy. (Note I do development on port 8081, so depending on how I checked stuff in
+you might need to go to that port instead.)
+
 
 
 

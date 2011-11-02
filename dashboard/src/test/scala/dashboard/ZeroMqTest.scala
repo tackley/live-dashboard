@@ -1,5 +1,6 @@
 package dashboard
 
+import lib.Event
 import org.specs2.mutable.Specification
 import org.zeromq.ZMQ
 import org.specs2.execute.Success
