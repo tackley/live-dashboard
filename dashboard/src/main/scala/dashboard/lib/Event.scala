@@ -15,6 +15,10 @@ case class Event(
   geo: String) {
 
   lazy val path = url takeWhile ('?' !=)
+
+  lazy val asLogString = """%15s [%s] "%s %s" %d "%s" "%s" "%s"""".format(
+    ip, Event.dateFormat.print(dt), method, url, responseCode, referrer.getOrElse("-"), userAgent, geo
+  )
 }
 
 

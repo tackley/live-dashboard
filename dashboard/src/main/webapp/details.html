@@ -7,14 +7,15 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js" type="text/javascript"></script>
 
     <style>
-        body { counter-reset: url; }
+        body { counter-reset: url; margin: 20px; }
         h2 { counter-increment: url;}
         h2:before { content: counter(url) " "; }
+        pre { font-size: 7pt; overflow: auto; white-space: pre; word-wrap: normal; }
     </style>
 
 <body>
 
-<div class="container">
+<div>
 
     <div class="page-header">
         <h1>Detail
@@ -30,6 +31,10 @@
         <ul>
             <li>referrer 1</li>
         </ul>
+
+        <pre class="logentries">
+Blah blah blah
+        </pre>
 
     </div>
 

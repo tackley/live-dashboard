@@ -29,6 +29,7 @@ case class HitReport(url: String, percent: Double, hits: Int, events: List[Event
 
 case class ListsOfStuff(
   all: TopHits = TopHits(),
+  everything: TopHits = TopHits(),
   content: TopHits = TopHits(),
   other: TopHits = TopHits(),
   lastUpdated: DateTime = DateTime.now,
@@ -48,6 +49,7 @@ case class ListsOfStuff(
 
     copy(
       all.diff(newList take 10),
+      everything.diff(newList),
       content.diff(newContent take 20),
       other.diff(newOther take 20),
       clicks.lastUpdated,
