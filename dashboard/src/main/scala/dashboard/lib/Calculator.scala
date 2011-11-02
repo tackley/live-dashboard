@@ -12,7 +12,7 @@ object Calculator {
 
     topTen map {
       case (url, hits, hitCount) =>
-        HitReport(url, hitCount.toDouble * 100 / totalClicks, hitCount, hits flatMap { _.referrer } toList)
+        HitReport(url, hitCount.toDouble * 100 / totalClicks, hitCount, hits.toList)
     }
   }
 

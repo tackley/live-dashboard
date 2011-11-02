@@ -12,8 +12,10 @@ case class Up() extends Movement { val imgTag = <img src="up_arrow_icon.png" alt
 case class Down() extends Movement { val imgTag = <img src="down_arrow_icon.png" alt="Down"/> }
 
 
-case class HitReport(url: String, percent: Double, hits: Int, referrers: List[String], movement: Movement = Unchanged()) {
+case class HitReport(url: String, percent: Double, hits: Int, events: List[Event], movement: Movement = Unchanged()) {
   def summary = "%s %.1f%% (%d hits)" format(url, percent, hits)
+
+  lazy val referrers = events flatMap { _.referrer }
 
   lazy val referrerHostCounts = referrers.flatMap(url => tryo { new URL(url).getHost })
     .groupBy(identity).mapValues(_.size).toList.sortBy(_._2).reverse
