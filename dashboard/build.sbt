@@ -11,7 +11,7 @@ libraryDependencies ++= Seq(
     "org.slf4j" % "slf4j-simple" % "1.6.1",
     "net.liftweb" %% "lift-webkit" % "2.4-M4",
     "org.specs2" %% "specs2" % "1.6.1" % "test",
-    "org.eclipse.jetty" % "jetty-webapp" % "7.5.3.v20111011" % "container"
+    "org.eclipse.jetty" % "jetty-webapp" % "7.5.3.v20111011" % "container;compile"
 )
 
 port in container.Configuration := 8081
