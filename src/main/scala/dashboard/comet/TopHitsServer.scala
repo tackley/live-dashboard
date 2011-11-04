@@ -39,8 +39,14 @@ abstract class MovingListBase extends CometActor with CometListener {
       ".toplink" #> <a href={ "details#" + (hit.url.replace("/", ""))}>{hit.url}</a> &
       ".percent *" #> "%.1f%%".format(hit.percent) &
       ".mover *" #> hit.movement.imgTag &
-      "li" #> hit.referrerPercents.take(5).map { case (host, percent) => "* *" #> "%.0f%% from %s".format(percent, host) }
+      "li" #> hit.referrerPercents.take(5).map { case (host, percent) =>
+        "* *" #> "%.0f%% from %s".format(percent, host) &
+        "* [class]" #> referrerClass(host)
+      }
     })
+
+  private def referrerClass(host: String) =
+    if (host.endsWith("guardian.co.uk") || host.endsWith("guardiannews.com")) "internal" else "external"
 }
 
 class TopTen extends MovingListBase {
