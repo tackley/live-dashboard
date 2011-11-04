@@ -4,8 +4,8 @@ object Calculator {
 
 
   def calcTopPaths(clickStream: ClickStream) = {
-    val totalClicks = clickStream.clicks.size
-    val clicksPerPath = clickStream.clicks.groupBy(_.path).map {
+    val totalClicks = clickStream.userClicks.size
+    val clicksPerPath = clickStream.userClicks.groupBy(_.path).map {
       case (k, v) => (k, v, v.size)
     }.toList
     val topTen = clicksPerPath.sortBy(_._3).reverse.take(50)

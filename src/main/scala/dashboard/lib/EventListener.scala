@@ -12,13 +12,19 @@ case class UpdateFrontend()
 
 
 // it's very very important that this class is totally immutable!
-case class ClickStream(clicks: GenSeq[Event], lastUpdated: DateTime, firstUpdated: DateTime) {
-  def +(e: Event) = copy(clicks = e +: clicks, lastUpdated = e.dt)
+case class ClickStream(allClicks: GenSeq[Event], lastUpdated: DateTime, firstUpdated: DateTime) {
+  lazy val userClicks = allClicks filterNot isBot
+
+  def +(e: Event) = copy(allClicks = e +: allClicks, lastUpdated = e.dt)
+
   def removeEventsBefore(dt: DateTime) = copy(
-    clicks = clicks.filterNot(_.dt < dt),
-    firstUpdated = if (firstUpdated > dt) firstUpdated else dt)
+    allClicks = allClicks.filterNot(_.dt < dt),
+    firstUpdated = if (firstUpdated > dt) firstUpdated else dt
+  )
 
   def ageMs = DateTime.now.millis - lastUpdated.millis
+
+  private def isBot(e: Event) = e.userAgent.startsWith("facebookexternalhit")
 }
 
 
@@ -31,9 +37,9 @@ class EventListener extends Actor {
     }
 
     case TruncateClickStream() => {
-      EventHandler.info(this, "Truncating click stream (size=%d)" format clickStream.clicks.size)
+      EventHandler.info(this, "Truncating click stream (size=%d)" format clickStream.allClicks.size)
       clickStream = clickStream.removeEventsBefore(DateTime.now - 15.minutes)
-      EventHandler.info(this, "Truncated click stream (size=%d)" format clickStream.clicks.size)
+      EventHandler.info(this, "Truncated click stream (size=%d)" format clickStream.allClicks.size)
     }
 
     case GetClickStream() => self.channel ! clickStream

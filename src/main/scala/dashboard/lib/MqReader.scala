@@ -29,6 +29,8 @@ class MqReader(actor: ActorRef) {
       val event = Event.fromApacheLog(result)
         // remove failures
         .filter { _.responseCode == 200 }
+        // only interested in "GET"'s
+        .filter { _.method == "GET" }
         // remove "self refreshes"
         .filterNot { isSelfRefresh }
         // remove common filter
