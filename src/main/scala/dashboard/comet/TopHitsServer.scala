@@ -63,7 +63,8 @@ class TopTwentySplit extends MovingListBase {
   def render = {
     "#content-pages" #> renderTopHits(topStuff.content) &
     "#other-pages" #> renderTopHits(topStuff.other) &
-    ".latest-data" #> topStuff.ageString
+    ".latest-data" #> topStuff.ageString &
+    ".cpm-count *" #> topStuff.hitsPerMinute
   }
 
 }

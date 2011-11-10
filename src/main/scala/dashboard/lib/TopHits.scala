@@ -33,27 +33,35 @@ case class ListsOfStuff(
   content: TopHits = TopHits(),
   other: TopHits = TopHits(),
   lastUpdated: DateTime = DateTime.now,
-  firstUpdated: DateTime = DateTime.now
+  firstUpdated: DateTime = DateTime.now,
+  totalHits: Long = 0
 ) {
   import ListsOfStuff._
 
   private val fmt = "d MMM yyyy h:mm:ss a"
 
-  def ageString = "%s to %s" format (
+  lazy val ageString = "%s to %s" format (
     firstUpdated.toString(fmt),
     lastUpdated.toString(fmt)
   )
+
+  lazy val timePeriodMillis = lastUpdated.millis - firstUpdated.millis
+  lazy val timePeriodSecs = timePeriodMillis / 60
+  lazy val hitsPerMinute = if (timePeriodSecs == 0) "N/A" else (totalHits * 60 / timePeriodSecs).toString
+
+  println("timePeriodMillis = %d, timePeriodSecs = %d, hpm = %s" format (timePeriodMillis, timePeriodSecs, hitsPerMinute))
 
   def diff(newList: List[HitReport], clicks: ClickStream) = {
     val (newContent, newOther) = newList.partition(isContent)
 
     copy(
-      all.diff(newList take 10),
-      everything.diff(newList),
-      content.diff(newContent take 20),
-      other.diff(newOther take 20),
-      clicks.lastUpdated,
-      clicks.firstUpdated
+      all = all.diff(newList take 10),
+      everything = everything.diff(newList),
+      content = content.diff(newContent take 20),
+      other = other.diff(newOther take 20),
+      lastUpdated = clicks.lastUpdated,
+      firstUpdated = clicks.firstUpdated,
+      totalHits = clicks.userClicks.size
     )
   }
 
