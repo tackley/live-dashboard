@@ -46,10 +46,12 @@ case class ListsOfStuff(
   )
 
   lazy val timePeriodMillis = lastUpdated.millis - firstUpdated.millis
-  lazy val timePeriodSecs = timePeriodMillis / 60
-  lazy val hitsPerMinute = if (timePeriodSecs == 0) "N/A" else (totalHits * 60 / timePeriodSecs).toString
+  lazy val timePeriodSecs = timePeriodMillis / 1000
+  // 10 is a magic number here : I know we're sampling 2 servers, and we have 20 in total
+  lazy val hitsScaledToAllServers = totalHits * 10
+  lazy val hitsPerSecond = if (timePeriodSecs == 0) "N/A" else (hitsScaledToAllServers / timePeriodSecs).toString
 
-  println("timePeriodMillis = %d, timePeriodSecs = %d, hpm = %s" format (timePeriodMillis, timePeriodSecs, hitsPerMinute))
+  println("timePeriodMillis = %d, timePeriodSecs = %d, hps = %s" format (timePeriodMillis, timePeriodSecs, hitsPerSecond))
 
   def diff(newList: List[HitReport], clicks: ClickStream) = {
     val (newContent, newOther) = newList.partition(isContent)

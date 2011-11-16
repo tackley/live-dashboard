@@ -37,12 +37,18 @@
             font-size: 10pt;
         }
 
-        .cpm {
+        .cps {
             float: right;
+            text-align: center;
+            margin-top: -15px;
         }
 
-        .cpm .cpm-count {
-            text-align: center;
+        .cps p {
+            margin: 0;
+
+        }
+
+        .cps .cps-count {
             font-size: 18pt;
         }
 
@@ -63,12 +69,13 @@
 
 <div class="container">
     <div class="content lift:comet?type=TopTwentySplit">
-        <div class="cpm">
-            <div class="cpm-count label notice">45</div>
-            <p>clicks/min<a href="#cpm-note">*</a></p>
+        <div class="cps">
+            <p>approx</p>
+            <div class="cps-count label notice">45</div>
+            <p>clicks/sec<a href="#cps-note">*</a></p>
         </div>
 
-        <div class="page-header">
+        <div class="page-header" >
             <h1>What&rsquo;s being read
                 <small>on www.guardian.co.uk over the last 15 minutes</small>
             </h1>
@@ -114,9 +121,9 @@
 
     </div>
 
-    <footer id="cpm-note">
-     * <span class="label notice">CLICKS/MIN</span> is the number of clicks received per minute averaged over
-        the last 15 minutes, on the 10% sample the SEO dashboard is monitoring.
+    <footer id="cps-note">
+     * <span class="label notice">CLICKS/SEC</span> is the approx number of clicks received per second averaged over
+        the last 15 minutes, scaled to the entire website.
     </footer>
 
 </div>

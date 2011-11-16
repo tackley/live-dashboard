@@ -64,7 +64,7 @@ class TopTwentySplit extends MovingListBase {
     "#content-pages" #> renderTopHits(topStuff.content) &
     "#other-pages" #> renderTopHits(topStuff.other) &
     ".latest-data" #> topStuff.ageString &
-    ".cpm-count *" #> topStuff.hitsPerMinute
+    ".cps-count *" #> topStuff.hitsPerSecond
   }
 
 }
