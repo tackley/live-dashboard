@@ -3,6 +3,10 @@ package dashboard.lib
 import org.zeromq.ZMQ
 import akka.actor.ActorRef
 
+object MqReader {
+  // 10 is a magic number here : I know we're sampling 2 servers, and we have 20 in total
+  val SCALE_TO_FULL_SITE = 10
+}
 
 class MqReader(actor: ActorRef) {
   var keepRunning = true

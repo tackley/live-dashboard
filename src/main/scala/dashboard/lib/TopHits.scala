@@ -12,7 +12,7 @@ case class Up() extends Movement { val imgTag = <img src="up_arrow_icon.png" alt
 case class Down() extends Movement { val imgTag = <img src="down_arrow_icon.png" alt="Down"/> }
 
 
-case class HitReport(url: String, percent: Double, hits: Int, events: List[Event], movement: Movement = Unchanged()) {
+case class HitReport(url: String, percent: Double, hits: Int, hitsPerSec: Double, events: List[Event], movement: Movement = Unchanged()) {
   def summary = "%s %.1f%% (%d hits)" format(url, percent, hits)
 
   lazy val referrers = events flatMap { _.referrer }
@@ -34,7 +34,8 @@ case class ListsOfStuff(
   other: TopHits = TopHits(),
   lastUpdated: DateTime = DateTime.now,
   firstUpdated: DateTime = DateTime.now,
-  totalHits: Long = 0
+  totalHits: Long = 0,
+  clickStreamSecs: Long = 0
 ) {
   import ListsOfStuff._
 
@@ -45,13 +46,10 @@ case class ListsOfStuff(
     lastUpdated.toString(fmt)
   )
 
-  lazy val timePeriodMillis = lastUpdated.millis - firstUpdated.millis
-  lazy val timePeriodSecs = timePeriodMillis / 1000
-  // 10 is a magic number here : I know we're sampling 2 servers, and we have 20 in total
-  lazy val hitsScaledToAllServers = totalHits * 10
-  lazy val hitsPerSecond = if (timePeriodSecs == 0) "N/A" else (hitsScaledToAllServers / timePeriodSecs).toString
+  lazy val hitsScaledToAllServers = totalHits * MqReader.SCALE_TO_FULL_SITE
+  lazy val hitsPerSecond = if (clickStreamSecs == 0) "N/A" else (hitsScaledToAllServers / clickStreamSecs).toString
 
-  println("timePeriodMillis = %d, timePeriodSecs = %d, hps = %s" format (timePeriodMillis, timePeriodSecs, hitsPerSecond))
+  println("hits = %d, timePeriodSecs = %d, hps = %s" format (totalHits, clickStreamSecs, hitsPerSecond))
 
   def diff(newList: List[HitReport], clicks: ClickStream) = {
     val (newContent, newOther) = newList.partition(isContent)
@@ -63,7 +61,8 @@ case class ListsOfStuff(
       other = other.diff(newOther take 20),
       lastUpdated = clicks.lastUpdated,
       firstUpdated = clicks.firstUpdated,
-      totalHits = clicks.userClicks.size
+      totalHits = clicks.userClicks.size,
+      clickStreamSecs = clicks.secs
     )
   }
 

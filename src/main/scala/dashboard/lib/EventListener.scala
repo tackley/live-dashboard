@@ -25,6 +25,9 @@ case class ClickStream(allClicks: GenSeq[Event], lastUpdated: DateTime, firstUpd
   def ageMs = DateTime.now.millis - lastUpdated.millis
 
   private def isBot(e: Event) = e.userAgent.startsWith("facebookexternalhit")
+
+  lazy val timePeriodMillis = lastUpdated.millis - firstUpdated.millis
+  lazy val secs = timePeriodMillis / 1000
 }
 
 

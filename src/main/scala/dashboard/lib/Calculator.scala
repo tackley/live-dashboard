@@ -12,7 +12,12 @@ object Calculator {
 
     topTen map {
       case (url, hits, hitCount) =>
-        HitReport(url, hitCount.toDouble * 100 / totalClicks, hitCount, hits.toList)
+        HitReport(
+          url = url,
+          percent = hitCount.toDouble * 100 / totalClicks,
+          hits = hitCount,
+          hitsPerSec = (hitCount.toDouble / clickStream.secs) * MqReader.SCALE_TO_FULL_SITE,
+          events = hits.toList)
     }
   }
 

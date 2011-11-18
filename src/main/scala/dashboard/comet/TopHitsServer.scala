@@ -37,7 +37,8 @@ abstract class MovingListBase extends CometActor with CometListener {
   def renderTopHits(t: TopHits) =
     "tr" #> (t.hits.zipWithIndex.map { case (hit: HitReport, idx: Int) =>
       ".toplink" #> <a href={ "details#" + (hit.url.replace("/", ""))}>{hit.url}</a> &
-      ".percent *" #> "%.1f%%".format(hit.percent) &
+      ".percent-value *" #> "%.1f%%".format(hit.percent) &
+      ".percent-cps *" #> "%.1f".format(hit.hitsPerSec) &
       ".mover *" #> hit.movement.imgTag &
       "li" #> hit.referrerPercents.take(5).map { case (host, percent) =>
         "* *" #> "%.0f%% from %s".format(percent, host) &
