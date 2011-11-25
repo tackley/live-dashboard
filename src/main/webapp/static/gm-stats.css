@@ -1,0 +1,24 @@
+/* This stylesheet is pulled in by the gm1.user.js greasemonkey script to style the in-place live counts stuff */
+
+.greasy-hits {
+    position: absolute;
+    z-index: 9000;
+    background-color: #62CFFC;
+    font-size: 10pt;
+    border-radius: 3px;
+    color: white;
+    padding: 1px 3px 2px;
+    text-indent: 0;
+}
+
+.greasy-hits:hover {
+    opacity: 0.5;
+}
+
+.greasy-hits-zero {
+    background-color: #CCCCCC;
+}
+
+.greasy-hits-high {
+    background-color: #62c462;
+}

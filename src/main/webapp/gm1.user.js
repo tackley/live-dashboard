@@ -5,15 +5,34 @@
 // @description    Show's Live Usage information on all guardian links
 // ==/UserScript==
 
-var jQuery = unsafeWindow.jQuery;
+var $ = unsafeWindow.jQuery;
 
-jQuery.getJSON("http://gnmfasteragain.int.gnl:5000/api/counts?callback=?", function(result) {
-  jQuery('.greasy-hits').remove()
-  jQuery('a.link-text').each(function(i, node) {
-    console.log(node);
-    if (result[node.href] != undefined) {
-      jQuery(node).before("<span class=greasy-hits style='position: absolute; z-index: 9000; background-color: #62CFFC;font-size: 10pt;border-radius: 3px;color: white;padding: 1px 3px 2px; text-indent: 0'>" + result[node.href] +"</span>");
-    }
-  });
+// add our stylesheet
+$('head').append('<link rel="stylesheet" href="http://gnmfasteragain.int.gnl:5000/static/gm-stats.css" type="text/css" />');
+
+// create "hits" elements for each g.co.uk link
+$('a[href^="http://www.guardian.co.uk"]').each(function(i, node) {
+  var targetUrl = node.href.split("?")[0].split("#")[0];
+  $(node).before('<span class=greasy-hits data-href="' + targetUrl + '"></span>');
 });
+
+
+function updateStats() {
+	$.getJSON("http://gnmfasteragain.int.gnl:5000/api/counts?callback=?", function(result) {
+	  $('span.greasy-hits').each(function() {
+	    var targetUrl = $(this).data('href');
+	    var count = result[targetUrl];
+	    if (count) {
+	      $(this).removeClass("greasy-hits-zero").text(count);
+	      if (count[0] === "0") { $(this).removeClass("greasy-hits-high"); } else { $(this).addClass("greasy-hits-high"); }
+	    } else {
+	      $(this).removeClass("greasy-hits-high").addClass("greasy-hits-zero").text("0");
+	    }
+	  });
+	});
+	window.setTimeout(updateStats, 5000);
+}
+
+updateStats();
+
 
