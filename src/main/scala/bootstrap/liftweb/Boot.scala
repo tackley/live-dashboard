@@ -7,6 +7,9 @@ import org.eclipse.jetty.server.Server
 import org.eclipse.jetty.servlet.ServletContextHandler
 import org.eclipse.jetty.servlet.DefaultServlet
 import org.eclipse.jetty.webapp.WebAppContext
+import scala.PartialFunction
+import net.liftweb.common.Box
+import dashboard.Api
 
 
 class Boot {
@@ -16,6 +19,10 @@ class Boot {
     LiftRules.htmlProperties.default.set((r: Req) => new Html5Properties(r.userAgent))
 
     LiftRules.addToPackages("dashboard")
+
+    LiftRules.statelessDispatchTable.append {
+      case Req("api" :: "counts" :: Nil, _, GetRequest) => Api.counts _
+    }
 
     Backend.start()
 

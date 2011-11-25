@@ -8,7 +8,7 @@ object Calculator {
     val clicksPerPath = clickStream.userClicks.groupBy(_.path).map {
       case (k, v) => (k, v, v.size)
     }.toList
-    val topTen = clicksPerPath.sortBy(_._3).reverse.take(50)
+    val topTen = clicksPerPath.sortBy(_._3).reverse
 
     topTen map {
       case (url, hits, hitCount) =>
