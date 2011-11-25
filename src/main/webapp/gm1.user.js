@@ -7,7 +7,7 @@
 
 var jQuery = unsafeWindow.jQuery;
 
-jQuery.getJSON("http://gnmfasteragain.int.gnl:8081/api/counts?callback=?", function(result) {
+jQuery.getJSON("http://gnmfasteragain.int.gnl:5000/api/counts?callback=?", function(result) {
   jQuery('.greasy-hits').remove()
   jQuery('a.link-text').each(function(i, node) {
     console.log(node);
