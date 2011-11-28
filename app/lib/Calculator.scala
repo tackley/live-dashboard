@@ -1,4 +1,4 @@
-package dashboard.lib
+package lib
 
 object Calculator {
 

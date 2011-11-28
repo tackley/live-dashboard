@@ -1,8 +1,7 @@
-package dashboard.lib
+package lib
 
 import xml.NodeSeq
 import java.net.URL
-import net.liftweb.util.Helpers._
 import org.scala_tools.time.Imports._
 
 sealed abstract class Movement { def imgTag: NodeSeq }
@@ -17,7 +16,7 @@ case class HitReport(url: String, percent: Double, hits: Int, hitsPerSec: Double
 
   lazy val referrers = events flatMap { _.referrer }
 
-  lazy val referrerHostCounts = referrers.flatMap(url => tryo { new URL(url).getHost })
+  lazy val referrerHostCounts = referrers.flatMap(url => try { Some(new URL(url).getHost) } catch { case _ => None })
     .groupBy(identity).mapValues(_.size).toList.sortBy(_._2).reverse
 
   lazy val referrerPercents: List[(String, Double)] = referrerHostCounts.map { case (host, count) =>

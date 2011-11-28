@@ -1,4 +1,4 @@
-package dashboard.lib
+package lib
 
 import akka.actor.Actor._
 import akka.actor.Scheduler
@@ -7,20 +7,20 @@ import java.util.concurrent.TimeUnit
 
 object Backend {
   val listener = actorOf[EventListener].start()
-  Scheduler.schedule(listener, TruncateClickStream(), 1, 1, TimeUnit.MINUTES)
-  Scheduler.schedule(listener, UpdateFrontend(), 5, 5, TimeUnit.SECONDS)
 
   val mqReader = new MqReader(listener)
 
   def start() {
+    Scheduler.restart()
+    Scheduler.schedule(listener, TruncateClickStream(), 1, 1, TimeUnit.MINUTES)
     spawn {
       mqReader.start()
     }
   }
 
   def stop() {
-    mqReader.stop()
     Scheduler.shutdown()
+    mqReader.stop()
     listener.stop()
   }
 

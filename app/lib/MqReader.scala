@@ -1,7 +1,8 @@
-package dashboard.lib
+package lib
 
 import org.zeromq.ZMQ
 import akka.actor.ActorRef
+import play.api.Logger
 
 object MqReader {
   // 10 is a magic number here : I know we're sampling 2 servers, and we have 20 in total
@@ -9,13 +10,14 @@ object MqReader {
 }
 
 class MqReader(actor: ActorRef) {
+  val logger = Logger(getClass)
   var keepRunning = true
   
   def stop() {
-    println("waiting for stop...")
+    logger.info("waiting for stop...")
     keepRunning = false
     Thread.sleep(2000)
-    println("stop has hopefully happened")
+    logger.info("stop has hopefully happened")
   }
   
   def start() {
@@ -50,7 +52,7 @@ class MqReader(actor: ActorRef) {
     sub.close()
     context.term()
     
-    println("Stopped!")
+    logger.info("Stopped!")
   }
 
 

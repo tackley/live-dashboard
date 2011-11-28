@@ -1,4 +1,4 @@
-package dashboard.lib
+package lib
 
 import org.joda.time.format.DateTimeFormat
 import org.joda.time.DateTime
