@@ -1,0 +1,37 @@
+@(topStuff: lib.ListsOfStuff)
+<div class="cps">
+    <p>approx</p>
+
+    <div class="cps-count label notice">@topStuff.hitsPerSecond</div>
+    <p>clicks/sec<a href="#cps-note">*</a></p>
+</div>
+
+<div class="page-header">
+    <h1>What&rsquo;s being read
+        <small>on www.guardian.co.uk over the last 15 minutes</small>
+    </h1>
+</div>
+
+<div class="row">
+    <div class="span9">
+        <h2>Content Pages</h2>
+
+        <table class="top-of-the-pops" id="content-pages">
+            @for(hit <- topStuff.content.hits) {
+              @rendertophit(hit)
+            }
+         </table>
+
+    </div>
+
+    <div class="span7">
+        <h2>Other Pages</h2>
+
+        <table class="top-of-the-pops" id="other-pages">
+            @for(hit <- topStuff.other.hits) {
+              @rendertophit(hit)
+            }
+        </table>
+
+    </div>
+</div>

@@ -8,6 +8,7 @@ GET     /                           controllers.Application.index()
 GET     /top10                      controllers.Application.top10()
 GET     /top10chart                 controllers.Application.top10chart()
 GET     /top20                      controllers.Application.top20()
+GET     /top20chart                 controllers.Application.top20chart()
 
 GET     /details                    controllers.Application.details()
 

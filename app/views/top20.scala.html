@@ -1,0 +1,78 @@
+@(listsOfStuff: lib.ListsOfStuff)
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Top 20</title>
+    <link href='http://fonts.googleapis.com/css?family=News+Cycle' rel='stylesheet' type='text/css'>
+    @views.html.snippets.includes()
+
+    <style>
+        body {
+            padding-top: 40px;
+        }
+
+        html, body {
+            background-color: #eee;
+        }
+
+            /* The white background content wrapper */
+        .content {
+            background-color: #fff;
+            padding: 20px;
+            margin: 0 -20px; /* negative indent the amount of the padding to maintain the grid system */
+            -webkit-border-radius: 0 0 6px 6px;
+            -moz-border-radius: 0 0 6px 6px;
+            border-radius: 0 0 6px 6px;
+            -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, .15);
+            -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, .15);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, .15);
+        }
+
+        ol {
+           list-style-type: disc;
+        }
+        li {
+            font-size: 10pt;
+        }
+
+        .cps {
+            float: right;
+            text-align: center;
+            margin-top: -15px;
+        }
+
+        .cps p {
+            margin: 0;
+
+        }
+
+        .cps .cps-count {
+            font-size: 18pt;
+        }
+
+        .percent .percent-cps {
+            font-size: 10pt;
+        }
+
+    </style>
+    <script src='@routes.Assets.at("js/auto-refresh.js")'></script>
+</head>
+<body>
+
+@views.html.snippets.topnav()
+
+<div class="container">
+
+    <div class="content" data-ajax-refresh="@routes.Application.top20chart()">
+        @views.html.snippets.top20chart(listsOfStuff)
+    </div>
+
+    <footer id="cps-note">
+     * <span class="label notice">CLICKS/SEC</span> is the approx number of clicks received per second averaged over
+        the last 15 minutes, scaled to the entire website.
+    </footer>
+
+</div>
+
+</body>
+</html>

@@ -11,7 +11,8 @@ object Application extends Controller {
   def top10 = Action { Ok(views.html.top10(Backend.currentLists.get.all)) }
   def top10chart = Action { Ok(views.html.snippets.top10chart(Backend.currentLists.get.all)) }
 
-  def top20 = TODO
+  def top20 = Action { Ok(views.html.top20(Backend.currentLists.get))}
+  def top20chart = Action { Ok(views.html.snippets.top20chart(Backend.currentLists.get)) }
 
   def details = Action { Ok(views.html.details(Backend.currentLists.get.everything)) }
   

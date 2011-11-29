@@ -1,1 +1,29 @@
-@(hit: lib.HitReport, idx: Int)
+@(hit: lib.HitReport)
+
+@referrerClass(host: String) = @{
+  if(host.endsWith("guardian.co.uk") || host.endsWith("guardiannews.com")) "internal" else "external"
+}
+
+<tr>
+    <td class="mover">
+        @for(imgName <- hit.movement.img) {
+         <img src='@routes.Assets.at("images/" + imgName + "_icon.png")' alt="@imgName">
+        }
+    </td>
+    <td>
+        <a class="toplink" href='@routes.Application.details()#@hit.id'>@hit.url</a>
+        <ol>
+            @for( (host, percent) <- hit.referrerPercents ) {
+                <li class="@referrerClass(host)">@("%.0f%% from %s".format(percent, host))</li>
+            }
+        </ol>
+    </td>
+    <td class="percent">
+      <p class="percent-value">@("%.1f".format(hit.percent))%</p>
+
+      <p class="label notice percent-cps" title="approximate clicks per second across entire site">
+          @("%.1f".format(hit.hitsPerSec))
+      </p>
+    </td>
+</tr>
+
