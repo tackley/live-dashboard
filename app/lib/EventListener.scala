@@ -7,6 +7,7 @@ import org.scala_tools.time.Imports._
 
 case class TruncateClickStream()
 case class GetClickStream()
+case class SendClickStreamTo(actor: ActorRef)
 
 
 // it's very very important that this class is totally immutable!
@@ -44,6 +45,8 @@ class EventListener extends Actor {
     }
 
     case GetClickStream() => self.channel ! clickStream
+
+    case SendClickStreamTo(actor) => actor ! clickStream
 
   }
 }

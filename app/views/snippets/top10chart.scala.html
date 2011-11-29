@@ -1,0 +1,38 @@
+@(t: lib.TopHits)
+@import lib._
+<div class="page-header">
+     <h1>Top 10
+         <small>on www.guardian.co.uk in the last 15 minutes</small>
+     </h1>
+ </div>
+
+@referrerClass(host: String) = @{
+  if(host.endsWith("guardian.co.uk") || host.endsWith("guardiannews.com")) "internal" else "external"
+}
+
+ <table class="top-of-the-pops">
+
+     @for(hit <- t.hits) {
+         <tr>
+             <td class="mover">
+                 @for(imgName <- hit.movement.img) {
+                    <img src='@routes.Assets.at("images/" + imgName + "_icon.png")' alt="@imgName">
+                 }
+             </td>
+             <td>
+                 <a class="toplink" href='details#@hit.url.replace("/", "")'>@hit.url</a>
+                 <ol>
+                     @for( (host, percent) <- hit.referrerPercents ) {
+                        <li class="@referrerClass(host)">@("%.0f%% from %s".format(percent, host))</li>
+                     }
+                 </ol>
+             </td>
+             <td class="percent percent-value">@("%.1f%%".format(hit.percent))</td>
+         </tr>
+     }
+ </table>
+
+
+ <footer>
+     <a href='@routes.Application.details'>click for detailed breakdown</a>
+ </footer>

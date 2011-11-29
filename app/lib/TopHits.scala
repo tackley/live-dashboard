@@ -4,11 +4,11 @@ import xml.NodeSeq
 import java.net.URL
 import org.scala_tools.time.Imports._
 
-sealed abstract class Movement { def imgTag: NodeSeq }
-case class Unchanged() extends Movement { val imgTag = NodeSeq.Empty }
-case class NewEntry() extends Movement { val imgTag =  <img src="new_entry_icon.png" alt="New"/> }
-case class Up() extends Movement { val imgTag = <img src="up_arrow_icon.png" alt="Up"/> }
-case class Down() extends Movement { val imgTag = <img src="down_arrow_icon.png" alt="Down"/> }
+sealed abstract class Movement { def img: Option[String] }
+case class Unchanged() extends Movement { val img = None }
+case class NewEntry() extends Movement { val img = Some("new") }
+case class Up() extends Movement { val img = Some("up") }
+case class Down() extends Movement { val img = Some("down") }
 
 
 case class HitReport(url: String, percent: Double, hits: Int, hitsPerSec: Double, events: List[Event], movement: Movement = Unchanged()) {

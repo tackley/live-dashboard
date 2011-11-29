@@ -1,9 +1,35 @@
 package lib
 
-object Calculator {
+import akka.actor.{ActorRef, Actor}
+import play.api.Logger
 
 
-  def calcTopPaths(clickStream: ClickStream) = {
+
+case class GetStats()
+
+class Calculator extends Actor {
+  val log = Logger(getClass)
+
+  // this is a raw list of all the hits we've seen, rolled up by path
+  private var currentTopPaths: List[HitReport] = Nil
+
+  // this is all sorts of sublists suitable for ui display (based on the above)
+  private var listsOfStuff: ListsOfStuff = ListsOfStuff()
+
+  protected def receive = {
+    case cs: ClickStream =>
+      log.info("Recalculating...")
+      currentTopPaths = calcTopPaths(cs)
+      listsOfStuff = listsOfStuff.diff(currentTopPaths, cs)
+      log.info("Done")
+
+    case GetStats() => self.channel ! (currentTopPaths, listsOfStuff)
+  }
+
+
+
+
+  private def calcTopPaths(clickStream: ClickStream) = {
     val totalClicks = clickStream.userClicks.size
     val clicksPerPath = clickStream.userClicks.groupBy(_.path).map {
       case (k, v) => (k, v, v.size)
@@ -20,8 +46,6 @@ object Calculator {
           events = hits.toList)
     }
   }
-
-
 }
 
 
