@@ -20,7 +20,7 @@
                  }
              </td>
              <td>
-                 <a class="toplink" href='details#@hit.url.replace("/", "")'>@hit.url</a>
+                 <a class="toplink" href='@routes.Application.details()#@hit.id'>@hit.url</a>
                  <ol>
                      @for( (host, percent) <- hit.referrerPercents ) {
                         <li class="@referrerClass(host)">@("%.0f%% from %s".format(percent, host))</li>
@@ -34,5 +34,5 @@
 
 
  <footer>
-     <a href='@routes.Application.details'>click for detailed breakdown</a>
+     <a href='@routes.Application.details()'>click for detailed breakdown</a>
  </footer>

@@ -1,0 +1,54 @@
+@(topStuff: lib.TopHits)
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Live Stats Detail</title>
+
+    @views.html.snippets.includes()
+
+    <style>
+        body { counter-reset: url; margin: 20px; }
+        h2 { counter-increment: url;}
+        h2:before { content: counter(url) " "; }
+        pre { font-size: 7pt; overflow: auto; white-space: pre; word-wrap: normal; }
+    </style>
+
+<body>
+
+<div>
+
+    <div class="page-header">
+        <h1>Detail
+            <small>on last 15 minutes of hits</small>
+        </h1>
+    </div>
+
+    <div class="data">
+
+        @for( (hit, idx) <- topStuff.hits.zipWithIndex ) {
+
+            <h2 id="@hit.id"><a class="toplink" href="@hit.fullUrl">@hit.url</a>
+            <small>@("%d hits (%.1f%%)".format(hit.hits, hit.percent))</small></h2>
+
+            <ul>
+                @for( (referrer, refHits) <- hit.referrers.groupBy(identity).toList.sortBy(_._1) ) {
+                  <li>
+                    <a href="@referrer">@referrer</a> @if(refHits.size > 1) { (@refHits.size) }
+                  </li>
+                }
+            </ul>
+
+            <pre class="logentries">
+@hit.events.sortBy(_.dt.getMillis).map(_.asLogString).mkString("\n")
+            </pre>
+        }
+
+    </div>
+
+    <footer>
+        <p>Note that all referrers are shown in alphabetical order</p>
+        <a href='@routes.Application.index()' style="float: right">back to summary</a>
+    </footer>
+</div>
+</body>
+</html>

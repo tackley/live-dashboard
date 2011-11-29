@@ -13,6 +13,6 @@ object Application extends Controller {
 
   def top20 = TODO
 
-  def details = TODO
+  def details = Action { Ok(views.html.details(Backend.currentLists.get.everything)) }
   
 }

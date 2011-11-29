@@ -23,6 +23,10 @@ case class HitReport(url: String, percent: Double, hits: Int, hitsPerSec: Double
     host -> (count * 100.0 / hits)
   }
 
+  lazy val id = url.replace("/", "")
+
+  lazy val fullUrl = "http://www.guardian.co.uk" + url
+
 }
 
 
