@@ -32,4 +32,6 @@ object Backend {
   def currentStats = (calculator ? GetStats()).as[(List[HitReport], ListsOfStuff)]
 
   def currentLists = currentStats.map(_._2)
+
+  def currentHits = currentStats.map(_._1).get
 }

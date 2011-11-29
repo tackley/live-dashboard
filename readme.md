@@ -36,8 +36,7 @@ Then startup with:
 
     foreman start
 
-Now go to http://localhost:8080 and enjoy. (Note I do development on port 8081, so depending on how I checked stuff in
-you might need to go to that port instead.)
+Now go to http://localhost:5000 and enjoy.
 
 
 
