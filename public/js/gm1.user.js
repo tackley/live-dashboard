@@ -9,7 +9,7 @@
 var $ = unsafeWindow.jQuery;
 
 // add our stylesheet
-$('head').append('<link rel="stylesheet" href="http://gnmfasteragain.int.gnl:5000/static/gm-stats.css" type="text/css" />');
+$('head').append('<link rel="stylesheet" href="http://gnmfasteragain.int.gnl:5000/assets/stylesheets/gm-stats.css" type="text/css" />');
 
 // create "hits" elements for each g.co.uk link
 $('a[href^="http://www.guardian.co.uk"]').each(function(i, node) {

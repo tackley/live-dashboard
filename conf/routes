@@ -16,3 +16,7 @@ GET     /api/counts                 controllers.Api.counts(callback: Option[Stri
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
+
+# and this one because the greasemonkey script references it
+# hmm doesn't work :(
+#GET     /static/gm-stats.css        controllers.Assets.at(path="/public", file="stylesheets/gm-stats.css")

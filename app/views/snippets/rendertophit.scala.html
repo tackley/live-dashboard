@@ -13,7 +13,7 @@
     <td>
         <a class="toplink" href='@routes.Application.details()#@hit.id'>@hit.url</a>
         <ol>
-            @for( (host, percent) <- hit.referrerPercents ) {
+            @for( (host, percent) <- hit.referrerPercents.take(5) ) {
                 <li class="@referrerClass(host)">@("%.0f%% from %s".format(percent, host))</li>
             }
         </ol>
