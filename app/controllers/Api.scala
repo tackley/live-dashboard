@@ -10,7 +10,7 @@ object Api extends Controller {
 
 
   def withCallback(callback: Option[String])(block: => String) = {
-    Ok(callback map { _ + "(" + block + ")" } getOrElse block)
+    Ok(callback map { _ + "(" + block + ")" } getOrElse block).as("application/javascript")
   }
 
   def counts(callback: Option[String]) = Action {
