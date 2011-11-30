@@ -25,7 +25,10 @@ function updateStats() {
 	    var count = result[targetUrl];
 	    if (count) {
 	      $(this).removeClass("greasy-hits-zero").text(count);
-	      if (count[0] === "0") { $(this).removeClass("greasy-hits-high"); } else { $(this).addClass("greasy-hits-high"); }
+	      if (count[0] === "0" || count === "trace")
+            { $(this).removeClass("greasy-hits-high"); }
+          else
+            { $(this).addClass("greasy-hits-high"); }
 	    } else {
 	      $(this).removeClass("greasy-hits-high").addClass("greasy-hits-zero").text("0");
 	    }

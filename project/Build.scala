@@ -12,7 +12,6 @@ object ApplicationBuild extends Build {
       "se.scalablesolutions.akka" % "akka-actor" % "1.2",
       "org.scala-tools.time" %% "time" % "0.5",
       "org.joda" % "joda-convert" % "1.1" % "provided",
-      "org.slf4j" % "slf4j-simple" % "1.6.1",
       "net.liftweb" %% "lift-json" % "2.4-M4",
       "org.specs2" %% "specs2" % "1.6.1" % "test"
     )

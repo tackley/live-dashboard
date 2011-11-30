@@ -21,7 +21,7 @@
     <td class="percent">
       <p class="percent-value">@("%.1f".format(hit.percent))%</p>
 
-      <p class="label notice percent-cps" title="approximate clicks per second across entire site">
+      <p class="label percent-cps @hit.cssClass" title="approximate clicks per second across entire site">
           @("%.1f".format(hit.hitsPerSec))
       </p>
     </td>

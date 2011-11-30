@@ -27,6 +27,8 @@ case class HitReport(url: String, percent: Double, hits: Int, hitsPerSec: Double
 
   lazy val fullUrl = "http://www.guardian.co.uk" + url
 
+  lazy val cssClass = if (hitsPerSec >= 1.0) "high" else ""
+
 }
 
 
