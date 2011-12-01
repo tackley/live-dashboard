@@ -24,8 +24,8 @@ class MqReader(actor: ActorRef) {
     val context = ZMQ.context(1)
     val sub = context.socket(ZMQ.SUB)
 
-    sub.connect("tcp://localhost:5100")
-    sub.connect("tcp://localhost:5200")
+    sub.connect("tcp://gnmfasteragain:5100")
+    sub.connect("tcp://gnmfasteragain:5200")
     sub.subscribe(Array.empty)
     sub.setHWM(50)
 
