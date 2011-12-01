@@ -1,9 +1,10 @@
 // ==UserScript==
 // @include	   http://www.guardian.co.uk/*
+// @include	   http://www.guardiannews.com/*
 // @name           Show Guardian Link Hits
 // @namespace      http://www.guardian.co.uk/usage
 // @description    Show's Live Usage information on all guardian links
-// @version         1.1
+// @version         1.2
 // ==/UserScript==
 console.log("Starting GreasyCounter");
 // a function that loads jQuery and calls a callback function when jQuery has finished loading
