@@ -15,5 +15,7 @@ object Application extends Controller {
   def top20chart = Action { Ok(views.html.snippets.top20chart(Backend.currentLists.get)) }
 
   def details = Action { Ok(views.html.details(Backend.currentLists.get.everything)) }
+
+  def search = Action { Ok(views.html.search()) }
   
 }

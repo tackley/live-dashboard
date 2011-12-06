@@ -5,7 +5,7 @@ import PlayProject._
 object ApplicationBuild extends Build {
 
     val appName         = "live-dashboard"
-    val appVersion      = "1.0"
+    val appVersion      = "1.1"
 
     val appDependencies = Seq(
       "org.zeromq" %% "zeromq-scala-binding" % "0.0.1-SNAPSHOT",

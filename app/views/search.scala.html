@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search</title>
+    <link href='http://fonts.googleapis.com/css?family=News+Cycle' rel='stylesheet' type='text/css'>
+    @views.html.snippets.includes()
+
+    <link rel="stylesheet" href='@routes.Assets.at("stylesheets/std.css")'>
+
+    <script defer src='@routes.Assets.at("js/search-terms.js")'></script>
+</head>
+<body>
+
+@views.html.snippets.topnav()
+
+<div class="container">
+
+    <div class="content">
+        <div class="page-header">
+            <h1>Live search terms
+                <small>on www.guardian.co.uk/search</small>
+            </h1>
+        </div>
+
+        <div class="row">
+            <div class="span-two-thirds search-terms">
+
+                <!--
+                <p>blah <span class="other-terms">tag=blah orderby=do</span></p>
+                <p>two</p>
+
+                -->
+
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+
+</body>
+</html>

@@ -30,7 +30,7 @@ case class ClickStream(allClicks: GenSeq[Event], lastUpdated: DateTime, firstUpd
 }
 
 
-class EventListener extends Actor {
+class ClickStreamActor extends Actor {
   var clickStream = ClickStream(Nil.par, DateTime.now, DateTime.now)
 
   protected def receive = {

@@ -9,14 +9,14 @@ object MqReader {
   val SCALE_TO_FULL_SITE = 10
 }
 
-class MqReader(actor: ActorRef) {
+class MqReader(consumers: List[ActorRef]) {
   val logger = Logger(getClass)
   var keepRunning = true
   
   def stop() {
     logger.info("waiting for stop...")
     keepRunning = false
-    Thread.sleep(2000)
+    Thread.sleep(500)
     logger.info("stop has hopefully happened")
   }
   
@@ -24,8 +24,8 @@ class MqReader(actor: ActorRef) {
     val context = ZMQ.context(1)
     val sub = context.socket(ZMQ.SUB)
 
-    sub.connect("tcp://gnmfasteragain:5100")
-    sub.connect("tcp://gnmfasteragain:5200")
+    sub.connect("tcp://localhost:5100")
+    sub.connect("tcp://localhost:5200")
     sub.subscribe(Array.empty)
     sub.setHWM(50)
 
@@ -46,7 +46,8 @@ class MqReader(actor: ActorRef) {
             e.path.startsWith("/global/adcode/generate")
         }
 
-      event.foreach { actor ! }
+      for (e <- event; a <- consumers) a ! e
+
     } while (keepRunning)
 
     sub.close()

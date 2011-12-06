@@ -22,6 +22,13 @@ object Api extends Controller {
     }
   }
 
+  def search(callback: Option[String], since: Long) = Action {
+    withCallback(callback) {
+      val response = Backend.liveSearchTerms.get.filter(_.dt > since).sortBy(_.dt)
+      Serialization.write(response)
+    }
+  }
+
   private def tidy(s: String) = s match {
     case "0.0" => "trace"
     case other => other

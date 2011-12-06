@@ -12,7 +12,11 @@ GET     /top20chart                 controllers.Application.top20chart()
 
 GET     /details                    controllers.Application.details()
 
+GET     /search                     controllers.Application.search()
+
 GET     /api/counts                 controllers.Api.counts(callback: Option[String])
+GET     /api/search                 controllers.Api.search(callback: Option[String], since: Long ?= 0)
+
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
