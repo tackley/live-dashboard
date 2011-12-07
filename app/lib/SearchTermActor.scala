@@ -21,9 +21,10 @@ class SearchTermActor extends Actor {
     case e: Event =>
       if (e.path == "/search") {
         val params = new QueryStringDecoder(e.url).getParameters.map{ case (k, v) => k -> v.head }.toMap
+          .filter { case (k, v) => v.length > 0}
 
         for (q <- params.get("q")) {
-          terms = (terms :+ GuSearchTerm(System.currentTimeMillis(), q, params - "q")).take(20)
+          terms = (GuSearchTerm(System.currentTimeMillis(), q, params - "q") :: terms).take(20)
         }
       }
 
