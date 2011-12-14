@@ -5,13 +5,14 @@ import java.util.concurrent.TimeUnit
 import org.joda.time.DateTime
 import akka.actor.{Supervisor, Scheduler}
 import akka.config.Supervision._
-
+import com.gu.openplatform.contentapi.model.Content
 
 
 object Backend {
   val listener = actorOf[ClickStreamActor].start()
   val calculator = actorOf[Calculator].start()
   val searchTerms = actorOf[SearchTermActor].start()
+  val latestContent = actorOf[LatestContentActor].start()
 
   val mqReader = new MqReader(listener :: searchTerms :: Nil)
 
@@ -19,6 +20,7 @@ object Backend {
     Scheduler.restart()
     Scheduler.schedule(listener, TruncateClickStream(), 1, 1, TimeUnit.MINUTES)
     Scheduler.schedule(listener, SendClickStreamTo(calculator), 5, 5, TimeUnit.SECONDS)
+    Scheduler.schedule(latestContent, LatestContentActor.Refresh(), 5, 30, TimeUnit.SECONDS)
     spawn {
       mqReader.start()
     }
@@ -33,6 +35,9 @@ object Backend {
     listener.stop()
   }
 
+  // So this is a bad way to do this, should use akka Agents instead (which can read
+  // without sending a message.)
+
   def currentStats = (calculator ? GetStats()).as[(List[HitReport], ListsOfStuff)]
 
   def currentLists = currentStats.map(_._2)
@@ -40,4 +45,6 @@ object Backend {
   def currentHits = currentStats.map(_._1).get
 
   def liveSearchTerms = (searchTerms ? GetSearchTerms()).as[List[GuSearchTerm]]
+
+  def last24hoursOfContent = (latestContent ? LatestContentActor.Get()).as[List[Content]]
 }

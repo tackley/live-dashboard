@@ -9,6 +9,9 @@ object MqReader {
   val SCALE_TO_FULL_SITE = 10
 }
 
+//
+// NB: akka 1.3 supports 0MQ actors, should use that instead
+//
 class MqReader(consumers: List[ActorRef]) {
   val logger = Logger(getClass)
   var keepRunning = true

@@ -3,6 +3,7 @@ package controllers
 import play.api._
 import play.api.mvc._
 import lib.Backend
+import org.joda.time.DateTime
 
 object Application extends Controller {
   
@@ -17,5 +18,35 @@ object Application extends Controller {
   def details = Action { Ok(views.html.details(Backend.currentLists.get.everything)) }
 
   def search = Action { Ok(views.html.search()) }
-  
+
+  private def publishedContent = {
+    val currentHits = Api.countsData
+    Backend.last24hoursOfContent.get.map { c =>
+      PublishedContent(c.webPublicationDate, c.webUrl, c.webTitle,
+        currentHits.get("/" + c.id).map(_.toString).getOrElse("0"))
+    }
+  }
+
+  def content = Action {
+    Ok(views.html.content(publishedContent))
+  }
+  def contentChart = Action {
+    Ok(views.html.snippets.contentChart(publishedContent))
+  }
+
+
+}
+
+
+case class PublishedContent(
+  publicationDate: DateTime,
+  url: String,
+  title: String,
+  hitsPerSec: String
+) {
+  lazy val cssClass = hitsPerSec match {
+    case "0" => "zero"
+    case s if s.startsWith("0") => ""
+    case _ => "high"
+  }
 }
