@@ -20,7 +20,7 @@ object Backend {
     Scheduler.restart()
     Scheduler.schedule(listener, TruncateClickStream(), 1, 1, TimeUnit.MINUTES)
     Scheduler.schedule(listener, SendClickStreamTo(calculator), 5, 5, TimeUnit.SECONDS)
-    Scheduler.schedule(latestContent, LatestContentActor.Refresh(), 5, 30, TimeUnit.SECONDS)
+    Scheduler.schedule(latestContent, LatestContentActor.Refresh(), 5, 10, TimeUnit.SECONDS)
     spawn {
       mqReader.start()
     }

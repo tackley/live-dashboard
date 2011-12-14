@@ -2,9 +2,9 @@
 <table>
    @for(c <- content) {
      <tr>
-         <td>@c.publicationDate.toString("d MMM h:mm:ss a")</td>
+         <td>@c.publicationDate.toString("d MMM HH:mm:ss")</td>
          <td><span class="label percent-cps @c.cssClass">@c.hitsPerSec</span>&nbsp;
-             <a href="@c.url">@Html(c.title)</a></td>
+             @Html(c.section) <a href="@c.url">@Html(c.title)</a></td>
      </tr>
    }
 </table>

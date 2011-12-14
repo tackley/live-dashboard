@@ -23,7 +23,8 @@ object Application extends Controller {
     val currentHits = Api.countsData
     Backend.last24hoursOfContent.get.map { c =>
       PublishedContent(c.webPublicationDate, c.webUrl, c.webTitle,
-        currentHits.get("/" + c.id).map(_.toString).getOrElse("0"))
+        currentHits.get(c.webUrl).map(_.toString).getOrElse("0"),
+        c.sectionName.getOrElse(""))
     }
   }
 
@@ -42,7 +43,8 @@ case class PublishedContent(
   publicationDate: DateTime,
   url: String,
   title: String,
-  hitsPerSec: String
+  hitsPerSec: String,
+  section: String
 ) {
   lazy val cssClass = hitsPerSec match {
     case "0" => "zero"
