@@ -75,16 +75,54 @@
         <div class="span-one-third">
             <h2>Overlay View</h2>
 
-            <p><span class="label notice">EXPERIMENTAL</span> Overlay overall hits per second when browsing the live
+            <p>Overlay overall hits per second when browsing the live
             site. Be careful: it shows overall hits for the page the link points at, NOT how many people clicked the link.
             Use SiteCatalyst's heat map for that!</p>
 
-            <p><a href="https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/">
-                You need to install the Greasemonkey add-on to Firefox first.</a>
-                Now working in Chrome! No Greasemonkey required</p>
+            <ul>
+                <li>To use in Firefox, you'll need to install
+                    <a href="https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/">
+                        the Greasemonkey add-on</a> then click the link below.
+                </li>
+                <li>
+                    To use in Chrome, just click the link below.
+                </li>
 
-            <p><a class="btn" href='@routes.Assets.at("js/gm1.user.js")'>Download &raquo;</a></p>
+            </ul>
+
+            <p><a class="btn" href='@routes.Assets.at("js/gm1.user.js")'>Install &raquo;</a></p>
         </div>
+
+        <div class="span-one-third">
+            <h2>Search</h2>
+
+            <p>Displays a live view of what people are searching for on
+                <a href="http://www.guardian.co.uk/search">http://www.guardian.co.uk/search</a>,
+            as they search.</p>
+
+            <p><a class="btn" href="@routes.Application.search()">Show Me &raquo;</a></p>
+
+        </div>
+
+
+        <div class="span-one-third">
+            <h2>Recently Published</h2>
+
+            <p>
+                Displays all content published on www.guardian.co.uk in the last 24 hours
+                (using the <a href="http://content.guardianapis.com">Open Platform Content API</a>).
+            </p>
+
+            <p>
+                Against each item of content shows the overall hits per second that item of content
+                has received in the last 15 minutes &em; the same number that is displayed on
+                the overlay and the top 20 charts.
+            </p>
+
+            <p><a class="btn" href="@routes.Application.content()">Show Me &raquo;</a></p>
+
+        </div>
+
     </div>
 
     <footer>
