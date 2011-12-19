@@ -34,9 +34,9 @@ We use [Foreman](https://github.com/ddollar/foreman) to startup all the apps, so
 
 Then startup with:
 
-    foreman start
+    ./start.sh
 
-Now go to http://localhost:5000 and enjoy.
+Which will run foreman start in an infinite loop. Now go to http://localhost:5000 and enjoy.
 
 
 
