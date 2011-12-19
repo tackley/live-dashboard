@@ -4,6 +4,7 @@ import play.api._
 import play.api.mvc._
 import lib.Backend
 import org.joda.time.DateTime
+import com.gu.openplatform.contentapi.model.Tag
 
 object Application extends Controller {
   
@@ -22,9 +23,12 @@ object Application extends Controller {
   private def publishedContent = {
     val currentHits = Api.countsData
     Backend.last24hoursOfContent.get.map { c =>
-      PublishedContent(c.webPublicationDate, c.webUrl, c.webTitle,
+      PublishedContent(
+        c.webPublicationDate, c.webUrl, c.webTitle,
         currentHits.get(c.webUrl).map(_.toString).getOrElse("0"),
-        c.sectionName.getOrElse(""))
+        c.sectionName.getOrElse(""),
+        c.tags
+      )
     }
   }
 
@@ -44,7 +48,8 @@ case class PublishedContent(
   url: String,
   title: String,
   hitsPerSec: String,
-  section: String
+  section: String,
+  tags: List[Tag]
 ) {
   lazy val cssClass = hitsPerSec match {
     case "0" => "zero"
