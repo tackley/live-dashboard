@@ -2,10 +2,10 @@ package lib
 
 import akka.actor.Actor._
 import java.util.concurrent.TimeUnit
-import org.joda.time.DateTime
 import akka.actor.{Supervisor, Scheduler}
 import akka.config.Supervision._
 import com.gu.openplatform.contentapi.model.Content
+import org.joda.time.{Duration, DateTime}
 
 
 object Backend {
@@ -40,11 +40,16 @@ object Backend {
 
   def currentStats = (calculator ? GetStats()).as[(List[HitReport], ListsOfStuff)]
 
-  def currentLists = currentStats.map(_._2)
+  def currentLists = currentStats.map(_._2).get
 
   def currentHits = currentStats.map(_._1).get
 
   def liveSearchTerms = (searchTerms ? GetSearchTerms()).as[List[GuSearchTerm]]
 
   def last24hoursOfContent = (latestContent ? LatestContentActor.Get()).as[List[Content]]
+
+  def minutesOfData = {
+    val currentData = currentLists
+    new Duration(currentData.firstUpdated, currentData.lastUpdated).getStandardMinutes
+  }
 }
