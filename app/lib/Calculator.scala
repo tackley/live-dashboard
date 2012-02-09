@@ -23,7 +23,7 @@ class Calculator extends Actor {
       listsOfStuff = listsOfStuff.diff(currentTopPaths, cs)
       log.info("Done")
 
-    case GetStats() => self.channel ! (currentTopPaths, listsOfStuff)
+    case GetStats() => sender ! (currentTopPaths, listsOfStuff)
   }
 
 

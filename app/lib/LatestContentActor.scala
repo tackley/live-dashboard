@@ -41,7 +41,7 @@ class LatestContentActor extends Actor {
       log("Content list is now " + latestContent.size + " entries")
 
     case LatestContentActor.Get() =>
-      self.channel ! latestContent
+      sender ! latestContent
 
   }
 

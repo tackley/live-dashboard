@@ -25,7 +25,7 @@ object Api extends Controller {
 
   def search(callback: Option[String], since: Long) = Action {
     withCallback(callback) {
-      val response = Backend.liveSearchTerms.get.filter(_.dt > since).sortBy(_.dt)
+      val response = Backend.liveSearchTerms.filter(_.dt > since).sortBy(_.dt)
       Serialization.write(response)
     }
   }
@@ -35,7 +35,7 @@ object Api extends Controller {
 
   def content(callback: Option[String], since: Long) = Action {
     withCallback(callback) {
-      val content = Backend.last24hoursOfContent.get.map { c =>
+      val content = Backend.last24hoursOfContent.map { c =>
         ApiContent(
           path = "/" + c.id,
           title = c.webTitle,

@@ -1,7 +1,6 @@
 package lib
 
 import akka.actor._
-import akka.event.EventHandler
 import collection.GenSeq
 import org.scala_tools.time.Imports._
 
@@ -32,7 +31,7 @@ case class ClickStream(allClicks: GenSeq[Event], lastUpdated: DateTime, firstUpd
 }
 
 
-class ClickStreamActor extends Actor {
+class ClickStreamActor extends Actor with ActorLogging {
   var clickStream = ClickStream(Nil.par, DateTime.now, DateTime.now)
 
   protected def receive = {
@@ -41,12 +40,12 @@ class ClickStreamActor extends Actor {
     }
 
     case TruncateClickStream() => {
-      EventHandler.info(this, "Truncating click stream (size=%d)" format clickStream.allClicks.size)
+      log.info("Truncating click stream (size=%d)" format clickStream.allClicks.size)
       clickStream = clickStream.removeEventsBefore(DateTime.now - 15.minutes)
-      EventHandler.info(this, "Truncated click stream (size=%d)" format clickStream.allClicks.size)
+      log.info("Truncated click stream (size=%d)" format clickStream.allClicks.size)
     }
 
-    case GetClickStream() => self.channel ! clickStream
+    case GetClickStream() => sender ! clickStream
 
     case SendClickStreamTo(actor) => actor ! clickStream
 

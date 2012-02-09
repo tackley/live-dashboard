@@ -28,8 +28,7 @@ class SearchTermActor extends Actor {
         }
       }
 
-    case GetSearchTerms() =>
-      self.channel ! terms
+    case GetSearchTerms() => sender ! terms
   }
 }
 
