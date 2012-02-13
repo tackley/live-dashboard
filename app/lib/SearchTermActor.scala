@@ -6,8 +6,6 @@ import scala.collection.JavaConversions._
 import org.joda.time.DateTime
 
 
-case class GetSearchTerms()
-
 case class GuSearchTerm(
   dt: Long,
   q: String,
@@ -15,6 +13,7 @@ case class GuSearchTerm(
 )
 
 class SearchTermActor extends Actor {
+  import SearchTermActor._
   private var terms: List[GuSearchTerm] = Nil
 
   protected def receive = {
@@ -28,7 +27,12 @@ class SearchTermActor extends Actor {
         }
       }
 
-    case GetSearchTerms() => sender ! terms
+    case GetSearchTerms => sender ! terms
   }
+}
+
+object SearchTermActor {
+  sealed trait Messages
+  case object GetSearchTerms
 }
 

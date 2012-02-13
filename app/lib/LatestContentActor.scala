@@ -6,8 +6,9 @@ import org.joda.time.DateTime
 import com.gu.openplatform.contentapi.Api
 
 object LatestContentActor {
-  case class Refresh()
-  case class Get()
+  sealed trait Messages
+  case object Refresh extends Messages
+  case object Get extends Messages
 }
 
 class LatestContentActor extends Actor {
@@ -24,7 +25,7 @@ class LatestContentActor extends Actor {
    As it stands it will miss content that gets published with the publication date out of order.
    */
   protected def receive = {
-    case LatestContentActor.Refresh() =>
+    case LatestContentActor.Refresh =>
       var lastDateTime = latestContent.headOption.map(_.webPublicationDate) getOrElse (new DateTime().minusHours(24))
 
       log("Getting latest content published since "+ lastDateTime + "...")
@@ -40,7 +41,7 @@ class LatestContentActor extends Actor {
 
       log("Content list is now " + latestContent.size + " entries")
 
-    case LatestContentActor.Get() =>
+    case LatestContentActor.Get =>
       sender ! latestContent
 
   }

@@ -20,9 +20,9 @@ object Backend {
   val mqReader = new MqReader(listener :: searchTerms :: Nil)
 
   def start() {
-    system.scheduler.schedule(1 minute, 1 minute, listener, TruncateClickStream())
-    system.scheduler.schedule(5 seconds, 5 seconds, listener, SendClickStreamTo(calculator))
-    system.scheduler.schedule(5 seconds, 10 seconds, latestContent, LatestContentActor.Refresh())
+    system.scheduler.schedule(1 minute, 1 minute, listener, ClickStreamActor.TruncateClickStream)
+    system.scheduler.schedule(5 seconds, 5 seconds, listener, ClickStreamActor.SendClickStreamTo(calculator))
+    system.scheduler.schedule(5 seconds, 10 seconds, latestContent, LatestContentActor.Refresh)
 
     spawn {
       mqReader.start()
@@ -42,16 +42,16 @@ object Backend {
 
   implicit val timeout = Timeout(5 seconds)
 
-  def currentStats = Await.result( (calculator ? GetStats()).mapTo[(List[HitReport], ListsOfStuff)], 5 seconds)
+  def currentStats = Await.result( (calculator ? Calculator.GetStats).mapTo[(List[HitReport], ListsOfStuff)], 5 seconds)
 
   def currentLists = currentStats._2
 
   def currentHits = currentStats._1
 
-  def liveSearchTermsFuture = (searchTerms ? GetSearchTerms()).mapTo[List[GuSearchTerm]]
+  def liveSearchTermsFuture = (searchTerms ? SearchTermActor.GetSearchTerms).mapTo[List[GuSearchTerm]]
   def liveSearchTerms = Await.result(liveSearchTermsFuture, timeout.duration)
 
-  def last24hoursOfContentFuture = (latestContent ? LatestContentActor.Get()).mapTo[List[Content]]
+  def last24hoursOfContentFuture = (latestContent ? LatestContentActor.Get).mapTo[List[Content]]
   def last24hoursOfContent = Await.result(last24hoursOfContentFuture, timeout.duration)
 
   def minutesOfData = {

@@ -1,11 +1,10 @@
 package lib
 
-import akka.actor.{ActorRef, Actor}
+import akka.actor.Actor
 import play.api.Logger
 
 
 
-case class GetStats()
 
 class Calculator extends Actor {
   val log = Logger(getClass)
@@ -16,6 +15,7 @@ class Calculator extends Actor {
   // this is all sorts of sublists suitable for ui display (based on the above)
   private var listsOfStuff: ListsOfStuff = ListsOfStuff()
 
+  import Calculator._
   protected def receive = {
     case cs: ClickStream =>
       log.info("Recalculating...")
@@ -23,11 +23,8 @@ class Calculator extends Actor {
       listsOfStuff = listsOfStuff.diff(currentTopPaths, cs)
       log.info("Done")
 
-    case GetStats() => sender ! (currentTopPaths, listsOfStuff)
+    case GetStats => sender ! (currentTopPaths, listsOfStuff)
   }
-
-
-
 
   private def calcTopPaths(clickStream: ClickStream) = {
     val totalClicks = clickStream.userClicks.size
@@ -48,4 +45,8 @@ class Calculator extends Actor {
   }
 }
 
+object Calculator {
+  sealed trait Messages
+  case object GetStats extends Messages
+}
 

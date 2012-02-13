@@ -4,10 +4,6 @@ import akka.actor._
 import collection.GenSeq
 import org.scala_tools.time.Imports._
 
-case class TruncateClickStream()
-case class GetClickStream()
-case class SendClickStreamTo(actor: ActorRef)
-
 
 // it's very very important that this class is totally immutable!
 case class ClickStream(allClicks: GenSeq[Event], lastUpdated: DateTime, firstUpdated: DateTime) {
@@ -34,22 +30,32 @@ case class ClickStream(allClicks: GenSeq[Event], lastUpdated: DateTime, firstUpd
 class ClickStreamActor extends Actor with ActorLogging {
   var clickStream = ClickStream(Nil.par, DateTime.now, DateTime.now)
 
+  import ClickStreamActor._
+
   protected def receive = {
     case e: Event => {
       clickStream += e
     }
 
-    case TruncateClickStream() => {
+    case TruncateClickStream => {
       log.info("Truncating click stream (size=%d)" format clickStream.allClicks.size)
       clickStream = clickStream.removeEventsBefore(DateTime.now - 15.minutes)
       log.info("Truncated click stream (size=%d)" format clickStream.allClicks.size)
     }
 
-    case GetClickStream() => sender ! clickStream
+    case GetClickStream => sender ! clickStream
 
     case SendClickStreamTo(actor) => actor ! clickStream
 
   }
+}
+
+object ClickStreamActor {
+  sealed trait Messages
+  case object TruncateClickStream extends Messages
+  case object GetClickStream extends Messages
+  case class SendClickStreamTo(actor: ActorRef) extends Messages
+
 }
 
 
