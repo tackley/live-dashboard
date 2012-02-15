@@ -7,6 +7,7 @@ import akka.actor._
 import akka.util.duration._
 import akka.dispatch.{Await, Future}
 import akka.util.Timeout
+import akka.pattern.ask
 import concurrent.ops
 import ops._
 
