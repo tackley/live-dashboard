@@ -12,18 +12,19 @@ import concurrent.ops
 import ops._
 
 object Backend {
-  val system = ActorSystem("liveDashboard")
+  implicit val system = ActorSystem("liveDashboard")
   val listener = system.actorOf(Props[ClickStreamActor], name = "clickStreamListener")
   val calculator = system.actorOf(Props[Calculator], name = "calculator")
   val searchTerms = system.actorOf(Props[SearchTermActor], name = "searchTermProcessor")
-  val latestContent = system.actorOf(Props[LatestContentActor], name = "latestContent")
+
+  val latestContent = new LatestContent
 
   val mqReader = new MqReader(listener :: searchTerms :: Nil)
 
   def start() {
     system.scheduler.schedule(1 minute, 1 minute, listener, ClickStreamActor.TruncateClickStream)
     system.scheduler.schedule(5 seconds, 5 seconds, listener, ClickStreamActor.SendClickStreamTo(calculator))
-    system.scheduler.schedule(5 seconds, 10 seconds, latestContent, LatestContentActor.Refresh)
+    system.scheduler.schedule(5 seconds, 15 seconds) { latestContent.refresh() }
 
     spawn {
       mqReader.start()
@@ -52,8 +53,9 @@ object Backend {
   def liveSearchTermsFuture = (searchTerms ? SearchTermActor.GetSearchTerms).mapTo[List[GuSearchTerm]]
   def liveSearchTerms = Await.result(liveSearchTermsFuture, timeout.duration)
 
-  def last24hoursOfContentFuture = (latestContent ? LatestContentActor.Get).mapTo[List[Content]]
-  def last24hoursOfContent = Await.result(last24hoursOfContentFuture, timeout.duration)
+  // this one uses an agent: this is the model that others should follows
+  // (agents are multi non-blocking read, single update)
+  def last24hoursOfContent = latestContent.latest()
 
   def minutesOfData = {
     val currentData = currentLists

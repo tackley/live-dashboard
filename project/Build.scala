@@ -11,6 +11,7 @@ object ApplicationBuild extends Build {
       "org.zeromq" %% "zeromq-scala-binding" % "0.0.3",
       "org.scala-tools.time" %% "time" % "0.5",
       "com.gu.openplatform" %% "content-api-client" % "1.13",
+      "com.typesafe.akka" % "akka-agent" % "2.0-RC1",
       "org.joda" % "joda-convert" % "1.1" % "provided",
       "net.liftweb" %% "lift-json" % "2.4-M4",
       "net.liftweb" %% "lift-json-ext" % "2.4-M4",
