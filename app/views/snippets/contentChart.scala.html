@@ -1,17 +1,5 @@
 @(content: List[controllers.PublishedContent])
 @datawarning()
-<div class="well">
-    <!--
-    <div style="float:right">
-        <label style="padding: 0">
-        <input type="checkbox" name="tags-toggle" id="tags-toggle">
-            <span>show tags</span>
-        </label>
-    </div>
-    -->
-    <div>@content.size items</div>
-</div>
-
 <table>
    @for(c <- content) {
      <tr>
@@ -31,7 +19,8 @@
 
 
 <script type="text/javascript">
-    $("#tags-toggle").change(function() {
-        console.log("change clicked!")
-    })
+//    $("#tags-toggle").change(function() {
+//        console.log("change clicked!")
+//        // todo: modify stylesheet to toggle visiblity of tag-list class
+//    })
 </script>

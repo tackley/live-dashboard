@@ -1,5 +1,4 @@
 @(content: List[controllers.PublishedContent])
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,7 +8,8 @@
 
     <link rel="stylesheet" href='@routes.Assets.at("stylesheets/std.css")'>
 
-    <script defer src='@routes.Assets.at("js/auto-refresh.js")'></script>
+    <script defer src='@routes.Assets.at("js/latest-content.js")'></script>
+
 </head>
 <body>
 
@@ -22,6 +22,15 @@
             <h1>Recently Published Content
                 <small>on www.guardian.co.uk in the last 24 hours</small>
             </h1>
+        </div>
+        
+        <div class="row content-controls">
+            <div class="span15 well">
+                <label>
+                <input type="checkbox" name="tags-toggle" id="tags-toggle">
+                    <span>show tags</span>
+                </label>
+           </div>
         </div>
 
         <div class="row">

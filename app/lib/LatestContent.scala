@@ -17,7 +17,7 @@ class LatestContent(implicit sys: ActorSystem) {
     // "sendOff" means this may be a slow operation, so
     // perform it not in one of the normal actor processing threads
     latest sendOff { content =>
-      var lastDateTime = content.headOption.map(_.webPublicationDate) getOrElse (new DateTime().minusHours(24))
+      val lastDateTime = content.headOption.map(_.webPublicationDate) getOrElse (new DateTime().minusHours(24))
 
       log.info("Getting latest content published since "+ lastDateTime + "...")
 
