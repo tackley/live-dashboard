@@ -27,6 +27,7 @@ object Application extends Controller {
         c.webPublicationDate, c.webUrl, c.webTitle,
         currentHits.get(c.webUrl).map(_.toString).getOrElse("0"),
         c.sectionName.getOrElse(""),
+        c.safeFields.get("trailText"),
         c.tags
       )
     }
@@ -49,6 +50,7 @@ case class PublishedContent(
   title: String,
   hitsPerSec: String,
   section: String,
+  trailText: Option[String], 
   tags: List[Tag]
 ) {
   lazy val cssClass = hitsPerSec match {

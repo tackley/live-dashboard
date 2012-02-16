@@ -1,6 +1,5 @@
 jQuery ->
   setVisibility = ->
-    console.log "setting visibility"
     $(".tag-list").toggle($("#tags-toggle").is(":checked"))
 
 

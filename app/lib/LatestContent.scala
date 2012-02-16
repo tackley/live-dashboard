@@ -22,7 +22,8 @@ class LatestContent(implicit sys: ActorSystem) {
       log.info("Getting latest content published since "+ lastDateTime + "...")
 
       val apiNewContent: List[Content] =
-        Api.search.fromDate(lastDateTime).showTags("all").orderBy("oldest").pageSize(50).results.reverse
+        Api.search.fromDate(lastDateTime).showTags("all")
+          .orderBy("oldest").showFields("trailText").pageSize(50).results.reverse
 
       // because of the way we handle dates we will always get at least one item of content repeated
       // so remove stuff we've already got from the api list

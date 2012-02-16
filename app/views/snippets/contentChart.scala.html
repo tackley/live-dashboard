@@ -4,9 +4,10 @@
    @for(c <- content) {
      <tr>
          <td>@c.publicationDate.toString("d MMM HH:mm:ss")</td>
+         <td><span class="label percent-cps @c.cssClass">@c.hitsPerSec</span></td>
          <td>
-             <span class="label percent-cps @c.cssClass">@c.hitsPerSec</span>&nbsp;
              @Html(c.section) <a href="@c.url">@Html(c.title)</a>
+             <div class="trail-text">@Html(c.trailText.getOrElse(""))</div>
              <ol class="tag-list">
                  @for(t <- c.tags) {
                     <li><a href="@t.webUrl">@t.webTitle</a></li>
