@@ -25,16 +25,18 @@
         </div>
         
         <div class="row content-controls">
-            <div class="span15 well">
-                <label>
-                <input type="checkbox" name="tags-toggle" id="tags-toggle">
-                    <span>show tags</span>
-                </label>
-           </div>
+            <div class="span11">
+                <div class="form-inline well">
+                    <label class="checkbox">
+                        <input type="checkbox" id="tags-toggle">
+                        show tags
+                    </label>
+               </div>
+            </div>
         </div>
 
         <div class="row">
-            <div class="span16" data-ajax-refresh="@routes.Application.contentChart()">
+            <div class="span12" data-ajax-refresh="@routes.Application.contentChart()">
                @views.html.snippets.contentChart(content)
             </div>
         </div>

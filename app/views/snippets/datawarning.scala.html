@@ -1,6 +1,6 @@
 @import lib._
 @if(Backend.minutesOfData < 10) {
-<div class="alert-message error">
+<div class="alert alert-error">
     SEO Dashboard has less than @(Backend.minutesOfData+1) minutes of data, probably due to a restart.
     Take any data with a very big pinch of salt!
 </div>
