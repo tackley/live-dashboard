@@ -35,7 +35,7 @@ object Api extends Controller {
 
   def content(callback: Option[String], since: Long) = Action {
     withCallback(callback) {
-      val content = Backend.last24hoursOfContent.map { c =>
+      val content = Backend.publishedContent.map { c =>
         ApiContent(
           path = "/" + c.id,
           title = c.webTitle,

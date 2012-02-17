@@ -53,9 +53,9 @@ object Backend {
   def liveSearchTermsFuture = (searchTerms ? SearchTermActor.GetSearchTerms).mapTo[List[GuSearchTerm]]
   def liveSearchTerms = Await.result(liveSearchTermsFuture, timeout.duration)
 
-  // this one uses an agent: this is the model that others should follows
+  // this one uses an agent: this is the model that others should follow
   // (agents are multi non-blocking read, single update)
-  def last24hoursOfContent = latestContent.latest()
+  def publishedContent = latestContent.latest()
 
   def minutesOfData = {
     val currentData = currentLists

@@ -22,7 +22,7 @@ object Application extends Controller {
 
   private def publishedContent = {
     val currentHits = Api.countsData
-    Backend.last24hoursOfContent.map { c =>
+    Backend.publishedContent.map { c =>
       PublishedContent(
         c.webPublicationDate, c.webUrl, c.webTitle,
         currentHits.get(c.webUrl).map(_.toString).getOrElse("0"),

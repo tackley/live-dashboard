@@ -17,7 +17,7 @@ class LatestContent(implicit sys: ActorSystem) {
     // "sendOff" means this may be a slow operation, so
     // perform it not in one of the normal actor processing threads
     latest sendOff { content =>
-      val lastDateTime = content.headOption.map(_.webPublicationDate) getOrElse (new DateTime().minusHours(24))
+      val lastDateTime = content.headOption.map(_.webPublicationDate) getOrElse (new DateTime().minusHours(4))
 
       log.info("Getting latest content published since "+ lastDateTime + "...")
 
@@ -29,7 +29,7 @@ class LatestContent(implicit sys: ActorSystem) {
       // so remove stuff we've already got from the api list
       val newContent = apiNewContent.filterNot(c => content.exists(_.id == c.id))
 
-      val result = newContent ::: content.filter(_.webPublicationDate.plusHours(24).isAfterNow)
+      val result = newContent ::: content.filter(_.webPublicationDate.plusHours(4).isAfterNow)
 
       log.info("Content list is now " + result.size + " entries")
 
