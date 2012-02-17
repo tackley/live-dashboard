@@ -43,7 +43,7 @@ function main() {
             // console.log("i: "+i+" elem:"+elem+" href "+targetUrl+" = "+count);
     	    if (count) {
     	      $(this).removeClass("greasy-hits-zero").text(count);
-    	      if (count[0] === "0" || count === "trace")
+    	      if (count[0] === "0" || count === "<0.1")
                 { $(this).removeClass("greasy-hits-high"); }
               else
                 { $(this).addClass("greasy-hits-high"); }

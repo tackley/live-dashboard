@@ -56,6 +56,7 @@ case class PublishedContent(
   lazy val cssClass = hitsPerSec match {
     case "0" => "zero"
     case s if s.startsWith("0") => ""
+    case "<0.1" => ""
     case "trace" => ""
     case _ => "high"
   }

@@ -1,10 +1,10 @@
 @(content: List[controllers.PublishedContent])
 @datawarning()
-<table class="table table-striped">
+<table class="published-content table table-striped">
    @for(c <- content) {
      <tr>
-         <td>@c.publicationDate.toString("d MMM HH:mm:ss")</td>
-         <td><span class="label percent-cps @c.cssClass">@c.hitsPerSec</span></td>
+         <td class="pub-date">@c.publicationDate.toString("d MMM HH:mm:ss")</td>
+         <td class="cps"><span class="label percent-cps @c.cssClass">@c.hitsPerSec</span></td>
          <td>
              @Html(c.section) <a href="@c.url" target="_blank">@Html(c.title)</a>
              <div class="trail-text">@Html(c.trailText getOrElse "")</div>

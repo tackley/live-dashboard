@@ -49,7 +49,7 @@ object Api extends Controller {
   }
 
   private def tidy(s: String) = s match {
-    case "0.0" => "trace"
+    case "0.0" => "<0.1"
     case other => other
   }
 
