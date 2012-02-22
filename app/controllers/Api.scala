@@ -14,8 +14,10 @@ object Api extends Controller {
     Ok(callback map { _ + "(" + block + ")" } getOrElse block).as("application/javascript")
   }
 
-  def countsData = Backend.currentHits
-          .map{ hit => hit.fullUrl -> tidy("%.1f".format(hit.hitsPerSec)) }.toMap
+  def fullData = Backend.currentHits.map { hit => hit.fullUrl -> hit }.toMap
+
+  def countsData = fullData.mapValues(_.tidyHitsPerSec)
+
 
   def counts(callback: Option[String]) = Action {
     withCallback(callback) {
@@ -48,9 +50,6 @@ object Api extends Controller {
     }
   }
 
-  private def tidy(s: String) = s match {
-    case "0.0" => "<0.1"
-    case other => other
-  }
+
 
 }

@@ -29,6 +29,12 @@ case class HitReport(url: String, percent: Double, hits: Int, hitsPerSec: Double
 
   lazy val cssClass = if (hitsPerSec >= 1.0) "high" else ""
 
+  lazy val tidyHitsPerSec = tidy("%.1f".format(hitsPerSec))
+
+  private def tidy(s: String) = s match {
+    case "0.0" => "<0.1"
+    case other => other
+  }
 }
 
 

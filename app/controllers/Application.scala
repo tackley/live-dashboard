@@ -2,9 +2,9 @@ package controllers
 
 import play.api._
 import play.api.mvc._
-import lib.Backend
 import org.joda.time.DateTime
 import com.gu.openplatform.contentapi.model.Tag
+import lib.{HitReport, Backend}
 
 object Application extends Controller {
   
@@ -21,14 +21,15 @@ object Application extends Controller {
   def search = Action { Ok(views.html.search()) }
 
   private def publishedContent = {
-    val currentHits = Api.countsData
+    val currentHits = Api.fullData
     Backend.publishedContent.map { c =>
       PublishedContent(
         c.webPublicationDate, c.webUrl, c.webTitle,
-        currentHits.get(c.webUrl).map(_.toString).getOrElse("0"),
+        currentHits.get(c.webUrl).map(_.tidyHitsPerSec).getOrElse("0"),
         c.sectionName.getOrElse(""),
         c.safeFields.get("trailText"),
-        c.tags
+        c.tags,
+        currentHits.get(c.webUrl)
       )
     }
   }
@@ -51,13 +52,25 @@ case class PublishedContent(
   hitsPerSec: String,
   section: String,
   trailText: Option[String], 
-  tags: List[Tag]
+  tags: List[Tag],
+  hitReport: Option[HitReport]
 ) {
-  lazy val cssClass = hitsPerSec match {
+  lazy val cpsCssClass = hitsPerSec match {
     case "0" => "zero"
     case s if s.startsWith("0") => ""
     case "<0.1" => ""
     case "trace" => ""
     case _ => "high"
   }
+  
+  lazy val rowCssClass = if (hasNetworkFrontReferrer) "front-referral" else ""
+
+  lazy val networkFrontTooltip =
+    if (hasNetworkFrontReferrer) "Have seen referrals from the UK network front"
+    else "No clicks to this page from the UK network front have been seen"
+
+  lazy val networkFrontText = if (hasNetworkFrontReferrer) "NF" else ""
+  
+  lazy val hasNetworkFrontReferrer =
+    hitReport map { _.referrers contains "http://www.guardian.co.uk/" } getOrElse false
 }
