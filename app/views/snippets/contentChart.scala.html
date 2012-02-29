@@ -1,8 +1,9 @@
 @(content: List[controllers.PublishedContent])
 @datawarning()
+
 <table class="published-content table table-striped">
    @for(c <- content) {
-     <tr class="@c.rowCssClass">
+<tr class="@c.rowCssClass">
          <td class="pub-date">@c.publicationDate.toString("d MMM HH:mm:ss")</td>
          <td class="cps"><span class="label percent-cps @c.cpsCssClass">@c.hitsPerSec</span></td>
          <td class="front-referral-status" title="@c.networkFrontTooltip">
@@ -13,6 +14,13 @@
          <td>
              @Html(c.section) <a href="@c.url" target="_blank">@Html(c.title)</a>
              <div class="trail-text">@Html(c.trailText getOrElse "")</div>
+             <div class="alt-text">
+                 @if(c.altText.isEmpty) {
+                   (no alt text found)
+                 } else {
+                    <input type="text" class="alt-text-input span10 uneditable-input" value="@c.altText.get">
+                 }
+                 </div>
              <ol class="tag-list">
                  @for(t <- c.tags) {
                     <li><a href="@t.webUrl">@t.webTitle</a></li>

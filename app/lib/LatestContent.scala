@@ -12,6 +12,11 @@ class LatestContent(implicit sys: ActorSystem) {
 
   private val log = Logging(sys, this.getClass)
   val latest = Agent[List[Content]](Nil)
+
+  val editorialSections = "artanddesign | books | business | childrens-books-site | commentisfree | " +
+    "crosswords | culture | education | environment | fashion | film | football | theguardian | " +
+    "theobserver | global | global-development | law | lifeandstyle | media | money | music | news | " +
+    "politics | science | society | sport | stage | technology | tv-and-radio | travel | uk | world";
   
   def refresh() {
     // "sendOff" means this may be a slow operation, so
@@ -23,7 +28,10 @@ class LatestContent(implicit sys: ActorSystem) {
 
       val apiNewContent: List[Content] =
         Api.search.fromDate(lastDateTime).showTags("all")
-          .orderBy("oldest").showFields("trailText").pageSize(50).results.reverse
+          .orderBy("oldest").showFields("trailText")
+          .showMedia("picture")
+          .section(editorialSections)
+          .pageSize(50).results.reverse
 
       // because of the way we handle dates we will always get at least one item of content repeated
       // so remove stuff we've already got from the api list

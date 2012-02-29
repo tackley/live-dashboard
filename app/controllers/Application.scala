@@ -3,8 +3,8 @@ package controllers
 import play.api._
 import play.api.mvc._
 import org.joda.time.DateTime
-import com.gu.openplatform.contentapi.model.Tag
 import lib.{HitReport, Backend}
+import com.gu.openplatform.contentapi.model.{MediaAsset, Tag, Content => ApiContent}
 
 object Application extends Controller {
   
@@ -21,6 +21,14 @@ object Application extends Controller {
   def search = Action { Ok(views.html.search()) }
 
   private def publishedContent = {
+
+    def altTextOfMainImageFor(c: ApiContent): Option[String] = {
+      val mainPic = c.mediaAssets.find(m => m.rel == "body" && m.index == 1) orElse
+        c.mediaAssets.find(m => m.rel == "gallery" && m.index == 1)
+
+      mainPic flatMap { m => m.fields.getOrElse(Map()).get("altText") }
+    }
+
     val currentHits = Api.fullData
     Backend.publishedContent.map { c =>
       PublishedContent(
@@ -29,7 +37,8 @@ object Application extends Controller {
         c.sectionName.getOrElse(""),
         c.safeFields.get("trailText"),
         c.tags,
-        currentHits.get(c.webUrl)
+        currentHits.get(c.webUrl),
+        altTextOfMainImageFor(c)
       )
     }
   }
@@ -53,7 +62,8 @@ case class PublishedContent(
   section: String,
   trailText: Option[String], 
   tags: List[Tag],
-  hitReport: Option[HitReport]
+  hitReport: Option[HitReport],
+  altText: Option[String]
 ) {
   lazy val cpsCssClass = hitsPerSec match {
     case "0" => "zero"
