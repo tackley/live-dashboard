@@ -38,7 +38,8 @@ object Application extends Controller {
         c.safeFields.get("trailText"),
         c.tags,
         currentHits.get(c.webUrl),
-        altTextOfMainImageFor(c)
+        altTextOfMainImageFor(c),
+        c.isLead.getOrElse(false)
       )
     }
   }
@@ -63,7 +64,8 @@ case class PublishedContent(
   trailText: Option[String], 
   tags: List[Tag],
   hitReport: Option[HitReport],
-  altText: Option[String]
+  altText: Option[String],
+  isLead: Boolean
 ) {
   lazy val cpsCssClass = hitsPerSec match {
     case "0" => "zero"

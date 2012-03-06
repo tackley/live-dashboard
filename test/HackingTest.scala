@@ -2,18 +2,21 @@ import akka.actor.ActorSystem
 import org.specs2.matcher.EventuallyMatchers
 import org.specs2.mutable.Specification
 import akka.agent._
+import play.api.libs.ws.WS
 
 
 class HackingTest extends Specification with EventuallyMatchers {
-  "agents" should {
-    "do what I think" in {
-      implicit val s = ActorSystem("test")
+  "api call" should {
+    "work" in {
+      val p = WS.url("http://content.guardianapis.com/uk/uk.json").get().map { r =>
+        (r.json \ "response" \ "leadContent" \\ "id").map(_.as[String])
+      }
+      
+      val theVal = p.await
 
-      val agent = Agent(17)
+      println(theVal)
 
-      agent send 6
-
-      agent() must eventually(beEqualTo(6))
+      1 + 1 must_==(3)
     }
   }
 

@@ -24,7 +24,7 @@ object Backend {
   def start() {
     system.scheduler.schedule(1 minute, 1 minute, listener, ClickStreamActor.TruncateClickStream)
     system.scheduler.schedule(5 seconds, 5 seconds, listener, ClickStreamActor.SendClickStreamTo(calculator))
-    system.scheduler.schedule(5 seconds, 15 seconds) { latestContent.refresh() }
+    system.scheduler.schedule(5 seconds, 30 seconds) { latestContent.refresh() }
 
     spawn {
       mqReader.start()
