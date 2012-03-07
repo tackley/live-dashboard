@@ -4,7 +4,7 @@
 <table class="published-content table table-striped">
    @for(c <- content) {
 <tr>
-         <td class="pub-date">@c.publicationDate.toString("d MMM HH:mm:ss")</td>
+         <td class="pub-date">@c.publicationDate.toString("HH:mm:ss")</td>
          <td class="cps">
              <span class="label percent-cps @c.cpsCssClass" title="Average hits per second over the last 15 minutes">
                  @c.hitsPerSec
@@ -12,12 +12,12 @@
          </td>
          <td class="uk-front-referral-status">
              @if(c.onUkFront) {
-                 <i class="icon-uk" title="On www.guardian.co.uk"></i>
+                 <i class="icon-uk" title="On http://www.guardian.co.uk/"></i>
              }
          </td>
          <td class="us-front-referral-status">
              @if(c.onUsFront) {
-                 <i class="icon-us" title="On www.guardiannews.com"></i>
+                 <i class="icon-us" title="On http://www.guardiannews.com/"></i>
              }
          </td>
             <td class="lead-status">
