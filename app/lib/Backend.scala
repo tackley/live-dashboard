@@ -19,12 +19,17 @@ object Backend {
 
   val latestContent = new LatestContent
 
+  val ukFrontLinkTracker = new LinkTracker("http://www.guardian.co.uk")
+  val usFrontLinkTracker = new LinkTracker("http://www.guardiannews.com")
+
   val mqReader = new MqReader(listener :: searchTerms :: Nil)
 
   def start() {
     system.scheduler.schedule(1 minute, 1 minute, listener, ClickStreamActor.TruncateClickStream)
     system.scheduler.schedule(5 seconds, 5 seconds, listener, ClickStreamActor.SendClickStreamTo(calculator))
     system.scheduler.schedule(5 seconds, 30 seconds) { latestContent.refresh() }
+    system.scheduler.schedule(1 seconds, 20 seconds) { ukFrontLinkTracker.refresh() }
+    system.scheduler.schedule(20 seconds, 60 seconds) { usFrontLinkTracker.refresh() }
 
     spawn {
       mqReader.start()

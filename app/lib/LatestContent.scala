@@ -75,7 +75,7 @@ class LatestContent(implicit sys: ActorSystem) {
     val contentMissingLeadStatus = contentList.filter(_.isLead.isEmpty)
     val leadSections = contentMissingLeadStatus.flatMap(_.sectionId).sorted.distinct
 
-    log.info("Need to find lead content status for " + leadSections)
+    log.info("Getting lead content status for " + leadSections)
     
     val leadItemsPromise = for {
       section <- leadSections
@@ -84,7 +84,7 @@ class LatestContent(implicit sys: ActorSystem) {
       section -> leadContentForTag(sectionTag)
     }
 
-    log.info("leadItemsPromise = " + leadItemsPromise)
+    log.debug("leadItemsPromise = " + leadItemsPromise)
     
     // now redeem those promises
     val leadItems = leadItemsPromise.flatMap { 
@@ -98,7 +98,7 @@ class LatestContent(implicit sys: ActorSystem) {
         )
     }.toMap
 
-    log.info("leadItems = " + leadItems)
+    log.debug("leadItems = " + leadItems)
     
     val result = contentList.map {
       case c if c.isLead.isDefined => c
@@ -109,13 +109,14 @@ class LatestContent(implicit sys: ActorSystem) {
       
         val isLead = leadList contains c.id
       
-        log.info("%s (%s) -> isLead = %s" format (c.id, section, isLead))
-        log.info("available lead content for this section: %s" format leadList.mkString("\t\n"))
+        log.debug("%s (%s) -> isLead = %s" format (c.id, section, isLead))
+        log.debug("available lead content for this section: %s" format leadList.mkString("\t\n"))
         c.copy(isLead = Some(isLead))
       
     }
-    
-    
+
+    log.info("Lead content processing complete")
+
     result
   }
 }

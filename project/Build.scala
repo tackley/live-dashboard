@@ -13,6 +13,7 @@ object ApplicationBuild extends Build {
       "com.gu.openplatform" %% "content-api-client" % "1.13",
       "com.typesafe.akka" % "akka-agent" % "2.0-RC1",
       "org.joda" % "joda-convert" % "1.1" % "provided",
+      "org.jsoup" % "jsoup" % "1.6.1",
       "net.liftweb" %% "lift-json" % "2.4-M4",
       "net.liftweb" %% "lift-json-ext" % "2.4-M4",
       "org.specs2" %% "specs2" % "1.6.1" % "test"

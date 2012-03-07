@@ -30,6 +30,9 @@ object Application extends Controller {
     }
 
     val currentHits = Api.fullData
+    val ukFrontLinks = Backend.ukFrontLinkTracker.links()
+    val usFrontLinks = Backend.usFrontLinkTracker.links()
+
     Backend.publishedContent.map { c =>
       PublishedContent(
         c.webPublicationDate, c.webUrl, c.webTitle,
@@ -39,7 +42,9 @@ object Application extends Controller {
         c.tags,
         currentHits.get(c.webUrl),
         altTextOfMainImageFor(c),
-        c.isLead.getOrElse(false)
+        c.isLead.getOrElse(false),
+        ukFrontLinks.contains(c.id),
+        usFrontLinks.contains(c.id)
       )
     }
   }
@@ -65,7 +70,9 @@ case class PublishedContent(
   tags: List[Tag],
   hitReport: Option[HitReport],
   altText: Option[String],
-  isLead: Boolean
+  isLead: Boolean,
+  onUkFront: Boolean,
+  onUsFront: Boolean
 ) {
   lazy val cpsCssClass = hitsPerSec match {
     case "0" => "zero"
@@ -74,15 +81,4 @@ case class PublishedContent(
     case "trace" => ""
     case _ => "high"
   }
-  
-  lazy val rowCssClass = if (hasNetworkFrontReferrer) "front-referral" else ""
-
-  lazy val networkFrontTooltip =
-    if (hasNetworkFrontReferrer) "Have seen referrals from the UK network front"
-    else "No clicks to this page from the UK network front have been seen"
-
-  lazy val networkFrontText = if (hasNetworkFrontReferrer) "NF" else ""
-  
-  lazy val hasNetworkFrontReferrer =
-    hitReport map { _.referrers contains "http://www.guardian.co.uk/" } getOrElse false
 }
