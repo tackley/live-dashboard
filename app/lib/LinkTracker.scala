@@ -27,6 +27,11 @@ class LinkTracker(url: String)(implicit actorSys: ActorSystem)  {
         .map { r =>
           val doc = Jsoup.parse(r.body, url)
 
+          // remove most viewed stuff from the front
+          // it'd be nice if there was a more reliable way to detect "automated"
+          // links on the front
+          doc.select(".most-viewed, .m-zeitgeist").remove()
+
           doc.select("a[href^=http:]")
             .map(_.attr("href"))
             .map(new URL(_))
