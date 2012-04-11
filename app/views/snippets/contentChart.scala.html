@@ -10,19 +10,24 @@
                  @c.hitsPerSec
              </span>
          </td>
-         <td class="uk-front-referral-status">
+         <td class="narrow-icon">
              @if(c.onUkFront) {
                  <i class="icon-uk" title="On http://www.guardian.co.uk/"></i>
              }
          </td>
-         <td class="us-front-referral-status">
+         <td class="narrow-icon">
              @if(c.onUsFront) {
                  <i class="icon-us" title="On http://www.guardiannews.com/"></i>
              }
          </td>
-            <td class="lead-status">
+            <td class="narrow-icon">
                 @if(c.isLead) {
                 <i class="icon-star-empty" title="Lead content for section tag"></i>
+                }
+            </td>
+            <td class="narrow-icon">
+                @if(c.isCommentable) {
+                <i class="icon-comment" title="Comments enabled"></i>
                 }
             </td>
          <td>
@@ -32,7 +37,7 @@
                  @if(c.altText.isEmpty) {
                    (no alt text found)
                  } else {
-                    <input type="text" class="alt-text-input span10 uneditable-input" value="@c.altText.get">
+                    <input type="text" class="alt-text-input span9 uneditable-input" value="@c.altText.get">
                  }
                  </div>
              <ol class="tag-list">

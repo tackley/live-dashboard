@@ -12,7 +12,9 @@ import play.api.libs.concurrent.Promise
 case class LiveDashboardContent(
   content: Content,
   isLead: Option[Boolean] = None
-)
+) {
+  lazy val isCommentable = content.safeFields.get("commentable").exists(_ == "true")
+}
 
 object LiveDashboardContent {
   // this is a temporary hack :)
@@ -42,7 +44,7 @@ class LatestContent(implicit sys: ActorSystem) {
 
       val apiNewContent: List[Content] =
         Api.search.fromDate(lastDateTime).showTags("all")
-          .orderBy("oldest").showFields("trailText")
+          .orderBy("oldest").showFields("trailText,commentable")
           .showMedia("picture")
           .section(editorialSections)
           .pageSize(50).results

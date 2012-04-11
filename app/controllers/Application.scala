@@ -44,7 +44,8 @@ object Application extends Controller {
         altTextOfMainImageFor(c),
         c.isLead.getOrElse(false),
         ukFrontLinks.contains(c.id),
-        usFrontLinks.contains(c.id)
+        usFrontLinks.contains(c.id),
+        c.isCommentable
       )
     }
   }
@@ -72,7 +73,8 @@ case class PublishedContent(
   altText: Option[String],
   isLead: Boolean,
   onUkFront: Boolean,
-  onUsFront: Boolean
+  onUsFront: Boolean,
+  isCommentable: Boolean
 ) {
   lazy val cpsCssClass = hitsPerSec match {
     case "0" => "zero"
