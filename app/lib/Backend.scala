@@ -13,8 +13,8 @@ import ops._
 
 object Backend {
   implicit val system = ActorSystem("liveDashboard")
-  val listener = system.actorOf(Props[ClickStreamActor], name = "clickStreamListener")
   val calculator = system.actorOf(Props[Calculator], name = "calculator")
+  val listener = system.actorOf(Props[ClickStreamActor], name = "clickStreamListener")
   val searchTerms = system.actorOf(Props[SearchTermActor], name = "searchTermProcessor")
 
   val latestContent = new LatestContent
@@ -22,7 +22,9 @@ object Backend {
   val ukFrontLinkTracker = new LinkTracker("http://www.guardian.co.uk")
   val usFrontLinkTracker = new LinkTracker("http://www.guardiannews.com")
 
-  val mqReader = new MqReader(listener :: searchTerms :: Nil)
+  val eventProcessors = listener :: searchTerms :: Nil
+
+  val mqReader = new MqReader(eventProcessors)
 
   def start() {
     system.scheduler.schedule(1 minute, 1 minute, listener, ClickStreamActor.TruncateClickStream)
