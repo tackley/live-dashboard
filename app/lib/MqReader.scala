@@ -41,7 +41,7 @@ class MqReader(consumers: List[ActorRef]) {
         // only interested in "GET"'s
         .filter { _.method == "GET" }
         // remove "self refreshes"
-        .filterNot { isSelfRefresh }
+        .filterNot { _.isSelfRefresh }
         // remove common filter
         .filterNot { e =>
           e.path.endsWith(".ico") || e.path.endsWith(".xml") || e.path.endsWith(".swf") ||
@@ -58,8 +58,4 @@ class MqReader(consumers: List[ActorRef]) {
     
     logger.info("Stopped!")
   }
-
-
-  def isSelfRefresh(e: Event) = e.referrer.exists(_.startsWith("http://www.guardian.co.uk" + e.path))
-
 }

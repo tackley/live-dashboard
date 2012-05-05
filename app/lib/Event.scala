@@ -19,6 +19,8 @@ case class Event(
   lazy val asLogString = """%15s [%s] "%s %s" %d "%s" "%s" "%s"""".format(
     ip, Event.dateFormat.print(dt), method, url, responseCode, referrer.getOrElse("-"), userAgent, geo
   )
+
+  def isSelfRefresh = referrer.exists(_.startsWith("http://www.guardian.co.uk" + path))
 }
 
 

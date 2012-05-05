@@ -21,6 +21,8 @@ GET     /api/counts                 controllers.Api.counts(callback: Option[Stri
 GET     /api/search                 controllers.Api.search(callback: Option[String], since: Long ?= 0)
 GET     /api/content                controllers.Api.content(callback: Option[String], since: Long ?= 0)
 
+POST    /incoming/sns               controllers.SNS.receive()
+
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
